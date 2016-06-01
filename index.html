@@ -1,0 +1,202 @@
+<h1>This is the modal</h1>
+<form id="templateForm">
+	<div class="container">
+		<!--Start of column 1-->
+		<div class="col-sm-6">
+			<div class="table table-borderless table-sm">
+				<table class="table" id="contributors-table">	
+					<thead>
+						<tr>
+						<th></th>
+						<th>Contributors</th>
+						<th>Last Name, First Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+						<td>
+							<label class="checkbox-label">
+								<div class="radio">
+									<input type="radio" name="optradio" class="table-radio">
+								</div>
+							</label>
+						</td>
+						<td>
+							<div class="form-group">
+								<select class="form-control input-sm" class="contributor-select">
+									<option value="author">Author</option>
+			    					<option value="editor">Editor</option>
+			    					<option value="translator">Translator</option>
+								</select>
+							</div>
+						</td>
+						<td>
+							<div class="form-group">
+								<input class="form-control input-sm name" type="text">
+							</div>
+						</td>
+						</tr>
+						<tr>
+						<td>
+							<label class="checkbox-label">
+								<div class="radio">
+									<input type="radio" name="optradio" class="table-radio">
+								</div>
+							</label>
+						</td>
+						<td>
+							<div class="form-group">
+								<select class="form-control input-sm" class="contributor-select">
+									<option value="author">Author</option>
+			    					<option value="editor">Editor</option>
+			    					<option value="translator">Translator</option>
+								</select>
+							</div>
+						</td>
+						<td>
+							<div class="form-group">
+								<input class="form-control input-sm name" type="text">
+							</div>
+						</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="table-buttons" class="btn-grp">
+				<button type="button" class="btn btn-default btn-md" id="add">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+				</button>
+				<button type="button" class="btn btn-default btn-md" id="up">
+					<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+				</button>
+				<button type="button" class="btn btn-default btn-md" id="down">
+					<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+				</button>
+				<button type="button" class="btn btn-default btn-md" id="delete">
+					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+				</button>
+			</div>
+
+  		    <div class="form-group">
+		      <div class="col-sm-8">
+		        <label for="title">Title</label>
+		        <input class="form-control input-sm" id="title" type="text" required>
+		      </div>
+		      <div class="col-sm-4">
+		        <label for="year">Year</label>
+		        <input class="form-control input-sm" id="year" type="number" required>
+		      </div>
+		    </div>
+		    <div class="form-group col-sm-12">
+          	<label for="pubtype">Publication Type:</label>
+		    	<select class="form-control input-sm" id="pubtype">
+			    	<option value="article">Article</option>
+			    	<option value="book">Book</option>
+			    	<option value="editedbook">Edited Book</option>
+			    	<option value="conference">Conference</option>
+			    	<option value="inbook">In Book</option>
+			    	<option value="incollection">In Collection</option>
+			    	<option value="inproceedings">In Proceedings</option>
+			    	<option value="manual">Manual</option>
+			    	<option value="masterthesis">Master's Thesis</option>
+			    	<option value="phdthesis">Ph.D. Thesis</option>
+			    	<option value="inproceedings">Proceedings</option>
+			    	<option value="techreport">Tech Report</option>
+			    	<option value="unpublished">Unpublished</option>
+			    	<option value="misc">Miscellaneous</option>
+			    	<option value="translatedbook">Translated Book</option>
+			    	<option value="webpub">Web Published</option>
+		    	</select>
+		    </div>
+		    <!--Start of dynamic elements forms-->
+		    <div class="form-group" id="dynamicUpdate">
+			   	<div class="col-sm-8">
+			        <label for="publisher">Publisher</label>
+			        <input class="form-control input-sm" id="publisher" type="text" required>
+			    </div>
+			    <div class="col-sm-4">
+			        <label for="city">City</label>
+			        <input class="form-control input-sm" id="city" type="text" required>
+			    </div>
+				
+				<div class="col-sm-2">
+			        <label for="volume">Volume</label>
+			        <input class="form-control input-sm" id="volume" type="number">
+			    </div>
+			    <div class="col-sm-2">
+			        <label for="series">Series</label>
+			        <input class="form-control input-sm" id="series" type="number">
+			    </div>
+				
+				<div class="col-sm-2">
+			        <label for="edition">Edition</label>
+			        <input class="form-control input-sm" id="edition" type="number">
+			    </div>
+
+				<div class="col-sm-6">
+				  <label for="sel1">Month</label>
+				  <select class="form-control input-sm" id="month">
+					<option value="january">January</option>
+					<option value="february">February</option>
+					<option value="march">March</option>
+					<option value="april">April</option>
+					<option value="may">May</option>
+					<option value="june">June</option>
+					<option value="july">July</option>
+					<option value="august">August</option>
+					<option value="september">September</option>
+					<option value="october">October</option>
+					<option value="november">November</option>
+					<option value="december">December</option>
+				  </select>
+				</div>
+
+			    <div class="form-group col-sm-12">
+					<label for="note">Note</label>
+					<textarea class="form-control" rows="4" id="note"></textarea>
+				</div>
+			</div><!--End of filling the dynamic forms-->
+
+
+		</div><!--End of column 1-->
+
+		<div class="col-sm-6">
+			<div id="preview-pane">
+				<p id="preview-header">Preview:</p>
+				<label id="preview-rawtext">
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+				</label>
+				<button type="button" class="btn btn-default btn-md">Update Preview</button>
+				<button type="button" class="btn btn-default btn-md">Raw Text</button>
+			</div>
+
+			<div class="form-group">
+				<label for="abstract">Abstract:</label>
+				<textarea class="form-control" rows="4" id="abstract"></textarea>
+			</div>
+
+			<div class="form-group">
+				<label for="keywords">Keywords:</label>
+				<textarea class="form-control" rows="4" id="keywords"></textarea>
+			</div>
+
+			<div class="form-group">
+				<label for="url">URL</label>
+  				<input type="url" class="form-control input-sm" id="url">	
+			</div>
+
+			<div class="form-group">
+				<label for="doi">DOI</label>
+  				<input type="date" class="form-control input-sm" id="doi">	
+			</div>
+
+		</div>
+	</div>
+	<div class="container">
+		<div id="control-buttons" class="btn-grp">
+			<button type="submit" class="btn btn-warning">Verify</button>
+			<button type="submit" class="btn btn-success">Save</button>
+			<button type="submit" class="btn btn-danger">Close</button>
+		</div>
+	</div>
+</form>
