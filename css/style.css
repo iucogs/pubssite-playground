@@ -30,9 +30,18 @@
 #pubsid{
   margin:10px;
 }
+
 .form-group{
-  margin-top:10px;
+  margin-bottom: 0px;
 }
+
+.radio input[type=radio] {
+  margin-left: 0px;
+  margin-top: 0px;
+}
+
+thead { font-weight: bold; }
+
 .table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
     border: none;
 }
