@@ -18,16 +18,19 @@
   </head>
 
   <body>
-  	<!--Article Template-->
-  	<script type="text/template" id="articleTemplate">
+	<!--Start input field templates-->
 
-	   	<div class="col-sm-8">
-	        <label for="journal">Journal</label>
-	        <input class="form-control input-sm" id="journal" type="text" required="true" value={{journal}}>
-	    </div>
-		<div class="col-sm-4">
-		  <label for="sel1">Month</label>
-		  <select class="form-control input-sm" id="month">
+	<!--Start Journal Template-->
+	<script type="text/template" id="journalTemplate">
+		<label>Journal</label>
+		<input class="form-control input-sm" id="journal" type="text" required="true" value={{journal}}>
+	</script>
+	<!--End Journal Template-->
+
+	<!--Start Month Template-->
+	<script type="text/template" id="monthTemplate">
+		<label>Month</label>
+		<select class="form-control input-sm" id="month">
 			<option value="january">January</option>
 			<option value="february">February</option>
 			<option value="march">March</option>
@@ -40,377 +43,276 @@
 			<option value="october">October</option>
 			<option value="november">November</option>
 			<option value="december">December</option>
-		  </select>
-		</div>
-		
-		<div class="col-sm-4">
-	        <label for="volume">Volume</label>
-	        <input class="form-control input-sm" id="volume" type="number" required="true" value={{volume}}>
-	    </div>
-	    <div class="col-sm-4">
-	        <label for="number">Number</label>
-	        <input class="form-control input-sm" id="number" type="number" value={{number}}>
-	    </div>
-		
-		<div class="col-sm-4">
-	        <label for="pages">Pages</label>
-	        <input class="form-control input-sm" id="pages" type="text" required="true" value="{{pages}}">
-	    </div>
+		</select>
+	</script>
+	<!--End Month Template-->
 
-	    <div class="form-group col-sm-12">
-			<label for="note">Note</label>
-			<textarea class="form-control" rows="4" id="note">{{note }}</textarea>
-		</div>
+	<!--Start Volume Template-->
+	<script type="text/template" id="volumeTemplate">
+		<label>Volume</label>
+		<input class="form-control input-sm" id="volume" type="number" required="true" value={{volume}}>
+	</script>
+	<!--End Volume Template-->
+
+	<!--Start Number Template-->
+	<script type="text/template" id="numberTemplate">
+		<label>Number</label>
+		<input class="form-control input-sm" id="number" type="number" value={{number}}>
+	</script>
+	<!--End Number Template-->
+
+	<!--Start Pages Template-->
+	<script type="text/template" id="pagesTemplate">
+		<label>Pages</label>
+		<input class="form-control input-sm" id="pages" type="text" required="true" value="{{pages}}">
+	</script>
+	<!--End Pages Template-->
+
+	<!--Start Note Template-->
+	<script type="text/template" id="noteTemplate">
+		<label>Note</label>
+		<textarea class="form-control" rows="4" id="note">{{note }}</textarea>
+	</script>
+	<!--End Note Template-->
+
+	<!--Start Book Title Template-->
+	<script type="text/template" id="bookTitleTemplate">
+		<label>Book Title</label>
+		<input class="form-control input-sm" id="booktitle" type="text" required="true" value={{booktitle}}>
+	</script>
+	<!--End Book Title Template-->
+
+	<!--Start Publisher Template-->
+	<script type="text/template" id="publisherTemplate">
+		<label>Publisher</label>
+		<input class="form-control input-sm" id="publisher" type="text" required value={{publisher}}>
+	</script>
+	<!--End Publishr Template-->
+
+	<!--Start chapter Template-->
+	<script type="text/template" id="chapterTemplate">
+		<label>Chapter</label>
+		<input class="form-control input-sm" id="chapter" type="number" value={{chapter}}>
+	</script>
+	<!--End chapter Template-->
+
+	<!--Start city Template-->
+	<script type="text/template" id="cityTemplate">
+		<label>City</label>
+		<input class="form-control input-sm" id="city" type="text" required value={{location}}>
+	</script>
+	<!--End city Template-->
+
+	<!--Start Series Template-->
+	<script type="text/template" id="seriesTemplate">
+		<label>Series</label>
+		<input class="form-control input-sm" id="series" type="number" value={{series}}>
+	</script>
+	<!--End Series Template-->	
+
+	<!--Start edition template-->
+	<script type="text/template" id="editionTemplate">
+		<label>Edition</label>
+		<input class="form-control input-sm" id="edition" type="number" value={{edition}}>
+	</script>
+	<!--End edition template-->
+
+	<!--Start Institution template-->
+	<script type="text/template" id="institutionTemplate">
+		<label>Institution</label>
+		<input class="form-control input-sm" id="institution" type="text" required value={{institution}}>
+	</script>
+	<!--End Institution template-->	
+
+	<!--Start Organization template-->
+	<script type="text/template" id="organizationTemplate">
+		<label>Organization</label>
+		<input class="form-control input-sm" id="organization" type="number" value={{organization}}>
+	</script>
+	<!--End Organization template-->	
+
+	<!--Start how Published template-->
+	<script type="text/template" id="howPublishedTemplate">
+		<label>How published</label>
+		<input class="form-control input-sm" id="howpublished" type="text" required value={{howpublished}}>
+	</script>
+	<!--End how Published template-->		
+
+	<!--Start School template-->
+	<script type="text/template" id="schoolTemplate">
+        <label>School</label>
+        <input class="form-control input-sm" id="school" type="text" required="true" value={{school}}>
+	</script>
+	<!--End school template-->
+	
+	<!--Start date retrieved template-->
+	<script type="text/template" id="dateRetrievedTemplate">
+		<label>Date Retrieved</label>
+		<input class="form-control input-sm" id="dateretrieved" type="date" required>
+	</script>
+	<!--End date retrieved template-->
+
+	<!--End inputfield Templates-->
+
+  	<!--Article Template-->
+  	<script type="text/template" id="articleTemplate">
+
+	   	<div class="col-sm-8" id="journalContainer"/>
+		<div class="col-sm-4" id="monthContainer"/>
+		<div class="col-sm-4" id="volumeContainer"/>
+	    <div class="col-sm-4" id="numberContainer"/>
+		<div class="col-sm-4" id="pagesContainer"/>
+	    <div class="form-group col-sm-12" id="noteContainer"/>
 	
   	</script>
   	<!--Article Template-->
 
 	<!--Book Template-->
   	<script type="text/template" id="bookTemplate">
-  		<div class="col-sm-6">
-        <label for="booktitle">Book Title</label>
-        <input class="form-control input-sm" id="booktitle" type="text" required value={{booktitle}}>
-    	</div>
 
-	   	<div class="col-sm-6">
-	        <label for="publisher">Publisher</label>
-	        <input class="form-control input-sm" id="publisher" type="text" required value={{publisher}}>
-	    </div>		    
+  		<div id="bookTitleContainer" class="col-sm-6"/>
+	   	<div id="publisherContainer" class="col-sm-6"/>	    
+	   	<div id="chapterContainer" class="col-sm-3"/>
+		<div id="cityContainer" class="col-sm-6"/>
+		<div id="volumeContainer" class="col-sm-3"/>
+	    <div id="seriesContainer" class="col-sm-2"/>
+		<div id="editionContainer" class="col-sm-2"/>
+		<div id="pagesContainer" class="col-sm-2"/>
+		<div id="monthContainer" class="col-sm-6"/>
+	    <div id="noteContainer" class="form-group col-sm-12"/>
 
-	   	<div class="col-sm-3">
-	        <label for="chapter">Chapter</label>
-	        <input class="form-control input-sm" id="chapter" type="number" value={{chapter}}>
-	    </div>
-
-			<div class="col-sm-6">
-	        <label for="city">City</label>
-	        <input class="form-control input-sm" id="city" type="text" required value={{location}}>
-	    </div>
-
-		<div class="col-sm-3">
-	        <label for="volume">Volume</label>
-	        <input class="form-control input-sm" id="volume" type="number" value={{volume}}>
-	    </div>
-
-		
-	    <div class="col-sm-2">
-	        <label for="series">Series</label>
-	        <input class="form-control input-sm" id="series" type="number" value={{series}}>
-	    </div>
-
-		<div class="col-sm-2">
-	        <label for="edition">Edition</label>
-	        <input class="form-control input-sm" id="edition" type="number" value={{edition}}>
-	    </div>
-		
-		<div class="col-sm-2">
-	        <label for="pages">pages</label>
-	        <input class="form-control input-sm" id="pages" type="text" required value={{pages}}>
-	    </div>
-
-		<div class="col-sm-6">
-		  <label for="sel1">Month</label>
-		  <select class="form-control input-sm" id="month">
-			<option value="january">January</option>
-			<option value="february">February</option>
-			<option value="march">March</option>
-			<option value="april">April</option>
-			<option value="may">May</option>
-			<option value="june">June</option>
-			<option value="july">July</option>
-			<option value="august">August</option>
-			<option value="september">September</option>
-			<option value="october">October</option>
-			<option value="november">November</option>
-			<option value="december">December</option>
-		  </select>
-		</div>
-
-	    <div class="form-group col-sm-12">
-			<label for="note">Note</label>
-			<textarea class="form-control" rows="4" id="note">{{note}}</textarea>
-		</div>
   	</script>
   	<!--End Book Template-->
 
   	<!--TechReport template-->
 	<script type="text/template" id="techreportTemplate">
-		<div class="col-sm-8">
-        <label for="institution">Institution</label>
-        <input class="form-control input-sm" id="institution" type="text" required value={{institution}}>
-	    </div>
-	    <div class="col-sm-4">
-	        <label for="number">Number</label>
-	        <input class="form-control input-sm" id="number" type="number" required value={{number}}>
-	    </div>
-		
-		<div class="col-sm-6">
-	        <label for="city">City</label>
-	        <input class="form-control input-sm" id="city" type="text" required value={{location}}>
-	    </div>
 
-		<div class="col-sm-6">
-		  <label for="sel1">Month</label>
-		  <select class="form-control input-sm" id="month">
-			<option value="january">January</option>
-			<option value="february">February</option>
-			<option value="march">March</option>
-			<option value="april">April</option>
-			<option value="may">May</option>
-			<option value="june">June</option>
-			<option value="july">July</option>
-			<option value="august">August</option>
-			<option value="september">September</option>
-			<option value="october">October</option>
-			<option value="november">November</option>
-			<option value="december">December</option>
-		  </select>
-		</div>
+		<div class="col-sm-8" id="institutionContainer"/>
+	    <div class="col-sm-4" id="numberContainer"/>
+		<div class="col-sm-6" id="cityContainer"/>
+		<div class="col-sm-6" id="monthContainer"/>
+	    <div class="form-group col-sm-12" id="noteContainer"/>
 
-	    <div class="form-group col-sm-12">
-			<label for="note">Note</label>
-			<textarea class="form-control" rows="4" id="note">{{note}}</textarea>
-		</div>
 	</script>
   	<!--End TechReport template-->
 
   	<!--Proceedings Template-->
 	<script type="text/template" id="proceedingsTemplate">
-		<div class="col-sm-8">
-        <label for="publisher">Publisher</label>
-        <input class="form-control input-sm" id="publisher" type="text" required value={{publisher}}>
-	    </div>
-	    <div class="col-sm-4">
-	        <label for="city">City</label>
-	        <input class="form-control input-sm" id="city" type="text" required value={{location}}>
-	    </div>
-		
-		<div class="col-sm-8">
-	        <label for="organization">Organization</label>
-	        <input class="form-control input-sm" id="organization" type="number" value={{organization}}>
-	    </div>
 
-		<div class="col-sm-4">
-		  <label for="sel1">Month</label>
-		  <select class="form-control input-sm" id="month">
-			<option value="january">January</option>
-			<option value="february">February</option>
-			<option value="march">March</option>
-			<option value="april">April</option>
-			<option value="may">May</option>
-			<option value="june">June</option>
-			<option value="july">July</option>
-			<option value="august">August</option>
-			<option value="september">September</option>
-			<option value="october">October</option>
-			<option value="november">November</option>
-			<option value="december">December</option>
-		  </select>
-		</div>
+		<div class="col-sm-8" id="publisherContainer"/>
+	    <div class="col-sm-4" id="cityContainer"/>
+		<div class="col-sm-8" id="organizationContainer"/>
+		<div class="col-sm-4" id="monthContainer"/>
+	    <div class="form-group col-sm-12" id="noteContainer"/>
 
-	    <div class="form-group col-sm-12">
-			<label for="note">Note</label>
-			<textarea class="form-control" rows="4" id="note">{{note}}</textarea>
-		</div>
 	</script>
 	<!--End Proceedings Template-->
 
 	<!--Unpublished Template-->
 	<script type="text/template" id="unpublishedTemplate">
-		<div class="col-sm-4">
-		  <label for="sel1">Month</label>
-		  <select class="form-control input-sm" id="month">
-			<option value="january">January</option>
-			<option value="february">February</option>
-			<option value="march">March</option>
-			<option value="april">April</option>
-			<option value="may">May</option>
-			<option value="june">June</option>
-			<option value="july">July</option>
-			<option value="august">August</option>
-			<option value="september">September</option>
-			<option value="october">October</option>
-			<option value="november">November</option>
-			<option value="december">December</option>
-		  </select>
-		</div>
 
-	    <div class="form-group col-sm-12">
-			<label for="note">Note</label>
-			<textarea class="form-control" rows="4" id="note" required>{{note}}</textarea>
-		</div>
+		<div class="col-sm-4" id="monthContainer"/>
+	    <div class="form-group col-sm-12" id="noteContainer"/>
+
 	</script>
 	<!--End Unpublished Template-->
 
 	<!--Misc Template-->
 	<script type="text/template" id="miscTemplate">
-		<div class="col-sm-8">
-	        <label for="howpublished">How published</label>
-	        <input class="form-control input-sm" id="howpublished" type="text" required value={{howpublished}}>
-    	</div>
 
-		<div class="col-sm-4">
-		  <label for="sel1">Month</label>
-		  <select class="form-control input-sm" id="month">
-			<option value="january">January</option>
-			<option value="february">February</option>
-			<option value="march">March</option>
-			<option value="april">April</option>
-			<option value="may">May</option>
-			<option value="june">June</option>
-			<option value="july">July</option>
-			<option value="august">August</option>
-			<option value="september">September</option>
-			<option value="october">October</option>
-			<option value="november">November</option>
-			<option value="december">December</option>
-		  </select>
-		</div>
+		<div class="col-sm-8" id="howPublishedContainer"/>
+		<div class="col-sm-4" id="monthContainer"/>
+	    <div class="form-group col-sm-12" id="noteContainer"/>
 
-	    <div class="form-group col-sm-12">
-			<label for="note">Note</label>
-			<textarea class="form-control" rows="4" id="note">{{note}}</textarea>
-		</div>
 	</script>
 	<!--End Misc Template-->
 
 	<!--phd, master thesis-->
 	<script type="text/template" id="thesisTemplate">
-		<div class="col-sm-12">
-        <label for="school">School</label>
-        <input class="form-control input-sm" id="school" type="text" required="true" value={{school}}>
-	    </div>
-	    <div class="col-sm-7">
-	        <label for="city">City</label>
-	        <input class="form-control input-sm" id="city" type="text" value={{location}}>
-	    </div>
-		
-		<div class="col-sm-5">
-		  <label for="sel1">Month</label>
-		  <select class="form-control input-sm" id="month">
-			<option value="january">January</option>
-			<option value="february">February</option>
-			<option value="march">March</option>
-			<option value="april">April</option>
-			<option value="may">May</option>
-			<option value="june">June</option>
-			<option value="july">July</option>
-			<option value="august">August</option>
-			<option value="september">September</option>
-			<option value="october">October</option>
-			<option value="november">November</option>
-			<option value="december">December</option>
-		  </select>
-		</div>
 
-	    <div class="form-group col-sm-12">
-			<label for="note">Note</label>
-			<textarea class="form-control" rows="4" id="note">{{note}}</textarea>
-		</div>
+		<div class="col-sm-12" id="schoolContainer"/>
+	    <div class="col-sm-7" id="cityContainer"/>	
+		<div class="col-sm-5" id="monthContainer"/>
+	    <div class="form-group col-sm-12" id="noteContainer"/>
+
 	</script>
 	<!--End phd, master thesis-->
 
 	<!--WebPublished what is date received??-->
 	<script type="text/template" id="webpublishedTemplate">
-		<div class="col-sm-8">
-        <label for="dateretrieved">Date Retrieved</label>
-        <input class="form-control input-sm" id="dateretrieved" type="date" required>
-	    </div>
-		<div class="col-sm-4">
-		  <label for="sel1">Month</label>
-		  <select class="form-control input-sm" id="month">
-			<option value="january">January</option>
-			<option value="february">February</option>
-			<option value="march">March</option>
-			<option value="april">April</option>
-			<option value="may">May</option>
-			<option value="june">June</option>
-			<option value="july">July</option>
-			<option value="august">August</option>
-			<option value="september">September</option>
-			<option value="october">October</option>
-			<option value="november">November</option>
-			<option value="december">December</option>
-		  </select>
-		</div>
 
-	    <div class="form-group col-sm-12">
-			<label for="note">Note</label>
-			<textarea class="form-control" rows="4" id="note">{{note}}</textarea>
-		</div>
+		<div class="col-sm-8" id="dateRetrievedContainer"/>
+		<div class="col-sm-4" id="monthContainer"/>
+	    <div class="form-group col-sm-12" id="noteContainer"/>
+
 	</script>
 	<!--End WebPublished-->
 
 	<!--incollection Template-->
 	<script type="text/template" id="incollectionTemplate">
-		<div class="col-sm-5">
-        <label for="booktitle">Book Title</label>
-        <input class="form-control input-sm" id="booktitle" type="text" required="true" value={{booktitle}}>
-	    </div>
-	    <div class="col-sm-4">
-	        <label for="city">City</label>
-	        <input class="form-control input-sm" id="city" type="text" value={{location}}>
-	    </div>
-		<div class="col-sm-3">
-		  <label for="sel1">Month</label>
-		  <select class="form-control input-sm" id="month">
-			<option value="january">January</option>
-			<option value="february">February</option>
-			<option value="march">March</option>
-			<option value="april">April</option>
-			<option value="may">May</option>
-			<option value="june">June</option>
-			<option value="july">July</option>
-			<option value="august">August</option>
-			<option value="september">September</option>
-			<option value="october">October</option>
-			<option value="november">November</option>
-			<option value="december">December</option>
-		  </select>
-		</div>
-		
-		<div class="col-sm-5">
-	        <label for="organization">Organization</label>
-	        <input class="form-control input-sm" id="organization" type="text" value={{organization}}>
-	    </div>
-	    <div class="col-sm-5">
-	        <label for="publisher">Publisher</label>
-	        <input class="form-control input-sm" id="publisher" type="text" required="true" value={{publisher}}>
-	    </div>
-		
-		<div class="col-sm-2">
-	        <label for="pages">Pages</label>
-	        <input class="form-control input-sm" id="pages" type="text" required="true" value={{pages}}>
-	    </div>
 
-	    <div class="form-group col-sm-12">
-			<label for="note">Note</label>
-			<textarea class="form-control" rows="4" id="note">{{note}}</textarea>
-		</div>
+		<div class="col-sm-5" id="bookTitleContainer"/>
+	    <div class="col-sm-4" id="cityContainer"/>
+		<div class="col-sm-3" id="monthContainer"/>		
+		<div class="col-sm-5" id="organizationContainer"/>
+	    <div class="col-sm-5" id="publisherContainer"/>
+		<div class="col-sm-2" id="pagesContainer"/>
+	    <div class="form-group col-sm-12" id="noteContainer"/>
+
 	</script>
 	<!--End incollection Template-->
 	
 	<!--Manual Template-->
 	<script type="text/template" id="manualTemplate">
-		<div class="col-sm-6">
-        <label for="organization">Organization</label>
-        <input class="form-control input-sm" id="organization" type="text" required="true" value={{organization}}>
-	    </div>
-	    <div class="col-sm-4">
-	        <label for="city">City</label>
-	        <input class="form-control input-sm" id="city" type="text" required="true" value={{location}}>
-	    </div>
-	    <div class="col-sm-2">
-	        <label for="edition">Edition</label>
-	        <input class="form-control input-sm" id="edition" type="number" required="true" value={{edition}}>
-	    </div>
-		
-	    <div class="form-group col-sm-12">
-			<label for="note">Note</label>
-			<textarea class="form-control" rows="4" id="note">{{note}}</textarea>
-		</div>
+
+		<div class="col-sm-6" id="organizationContainer"/>
+	    <div class="col-sm-4" id="cityContainer"/>
+	    <div class="col-sm-2" id="editionContainer"/>
+	    <div class="form-group col-sm-12" id="noteContainer"/>
+
 	</script>
 	<!--End Manual template-->
+
+	<!--Start Edited book template-->
+	<script type="text/template" id="editedBookTemplate">
+		<div class="col-sm-6" id="publisherContainer"/>
+		<div class="col-sm-6" id="cityContainer"/>
+		<div class="col-sm-3" id="volumeContainer"/>
+		<div class="col-sm-3" id="seriesContainer"/>
+		<div class="col-sm-3" id="editionContainer"/>
+		<div class="col-sm-3" id="monthContainer"/>
+		<div class="form-group col-sm-12" id="noteContainer"/>
+	</script>
+	<!--End Edited book template-->
+
+	<!--Start InBook Template-->
+	<script type="text/template" id="inBookTemplate">
+		<div class="col-sm-6" id="bookTitleContainer"></div>
+		<div class="col-sm-6" id="publisherContainer"></div>
+		<div class="col-sm-4" id="chapterContainer"></div>
+		<div class="col-sm-4" id="cityContainer"></div>
+		<div class="col-sm-4" id="volumeContainer"></div>
+		<div class="col-sm-3" id="seriesContainer"></div>
+		<div class="col-sm-3" id="editionContainer"></div>
+		<div class="col-sm-3" id="pagesContainer"></div>
+		<div class="col-sm-3" id="monthContainer"></div>
+		<div class="col-sm-12" id="noteContainer"></div>
+	</script>
+	<!--End InBook Template-->
+
+	<!--Start TranslatedBook Template-->
+	<script type="text/template" id="translatedBookTemplate">
+
+		<div class="col-sm-7" id="publisherContainer"/>
+		<div class="col-sm-5" id="cityContainer"/>
+		<div class="col-sm-3" id="seriesContainer"/>
+		<div class="col-sm-3" id="editionContainer"/>
+		<div class="col-sm-3" id="volumeContainer"/>
+		<div class="col-sm-3" id="monthContainer"/>
+		<div class="col-sm-12" id="noteContainer"/>
+
+	</script>
+	<!--End TranslatedBook Template-->
 
 	<script type="text/template" id="dataTemplate">
 		
@@ -428,7 +330,7 @@
 					</thead>
 					<tbody>
 						{{#authors}}
-							<tr>
+							<tr class="author">
 							<td>
 								<label class="checkbox-label">
 									<div class="radio">
@@ -473,11 +375,11 @@
   		    <div class="form-group">
 		      <div class="col-sm-8">
 		        <label for="title">Title</label>
-		        <input class="form-control input-sm" id="title" type="text" value={{title}} required>
+		        <input class="form-control input-sm" id="title" type="text" required="true" value={{title}} />
 		      </div>
 		      <div class="col-sm-4">
 		        <label for="year">Year</label>
-		        <input class="form-control input-sm" id="year" type="number" value={{year}} required>
+		        <input class="form-control input-sm" id="year" type="number" required="true" value={{year}} />
 		      </div>
 		    </div>
 		    <div class="form-group col-sm-12">
@@ -491,7 +393,7 @@
 			    	<option value="incollection">In Collection</option>
 			    	<option value="inproceedings">In Proceedings</option>
 			    	<option value="manual">Manual</option>
-			    	<option value="masterthesis">Master's Thesis</option>
+			    	<option value="mastersthesis">Master's Thesis</option>
 			    	<option value="phdthesis">Ph.D. Thesis</option>
 			    	<option value="proceedings">Proceedings</option>
 			    	<option value="techreport">Tech Report</option>
@@ -503,7 +405,7 @@
 		    </div>
 		    <!--Start of dynamic elements forms-->
 		    
-		    <div class="form-group" id="dynamicUpdate">
+		    <div class="form-group" id="dynamicTemplateContainer">
 			   	
 			</div>
 			<!--End of filling the dynamic forms-->
@@ -545,15 +447,15 @@
 	</div>
 	<div class="container">
 		<div id="control-buttons" class="btn-grp">
-			<button type="submit" class="btn btn-warning">Verify</button>
-			<button type="submit" class="btn btn-success">Save</button>
-			<button type="submit" class="btn btn-danger">Close</button>
+			<button type="button" id="verify" class="btn btn-warning">Verify</button>
+			<button type="button" id="save" class="btn btn-success">Save</button>
+			<button type="button" id="close" class="btn btn-danger">Close</button>
 		</div>
 	</div>
 
 
 	</script>
-	<form id="templateForm"></form>
+	<form id="wholeTemplateContainer"></form>
 </body>
 
 </html>

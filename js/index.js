@@ -1,91 +1,21 @@
-var globalData = {};
+var currentData = {};
+var globalConstants = {};
+
 $("document").ready(function () {
   console.log("In the doc ready func")
   $.getJSON('http://nupubs.cogs.indiana.edu/citation/33590', function (data) {
-    globalData = data;
-    var template = $("#dataTemplate").html();
-    var result = Mustache.render(template, data);
-    $("#templateForm").html(result);
+    currentData = data;
+    // Setting global constants
+    globalConstants.citation_id = data.citation_id;
+    globalConstants.entryTime = data.entryTime;
+
+    // Displaying the dynamic template
+    render(data, "#dataTemplate", "#wholeTemplateContainer");
 
     // Setting the publicationType
     var pubType = data.pubtype.toLowerCase();
     $("#pubtype option[value="+pubType+"]").attr("selected", true);
-
-    switch(pubType) {
-      case "article": 
-        console.log("Article")
-        var dynamicTemplate = $("#articleTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break;
-
-      case "book":
-        console.log("Book")
-        var dynamicTemplate = $("#bookTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break;
-
-      case "techreport": 
-        console.log("Tech Report")
-        var dynamicTemplate = $("#techreportTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break;
-
-      case "misc":
-        console.log("Misc")
-        var dynamicTemplate = $("#miscTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break;
-
-      case "proceedings": 
-        console.log("proceedings")
-        var dynamicTemplate = $("#proceedingsTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break;
-
-      case "unpublished":
-        console.log("unpublished")
-        var dynamicTemplate = $("#unpublishedTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break;
-
-      case "phdthesis":
-      case "mastersthesis":
-        console.log("thesis")
-        var dynamicTemplate = $("#thesisTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break;
-
-      case "web_published":
-        console.log("web_published")
-        var dynamicTemplate = $("#webpublishedTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break;
-
-      case "incollection":
-      case "inproceedings":
-      case "conference":
-        console.log("Incollection || inproceedings || conference")
-        var dynamicTemplate = $("#incollectionTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break;
-
-      case "manualTemplate":
-        console.log("manualTemplate")
-        var dynamicTemplate = $("#manualTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break; 
-
-    } 
+    changeTemplate(data, pubType);
 
     // Setting the month
     var publicationMonth = data.month.toLowerCase();
@@ -99,11 +29,10 @@ $("document").ready(function () {
   
 });
 
-
 $(document).on("click", "#add", function (){
   console.log("In the addition function");
   var tableRow = `
-          <tr>
+          <tr class="author">
             <td>
               <label class="checkbox-label">
                 <div class="radio">
@@ -161,146 +90,218 @@ $(document).on("click", "#contributors-table tr", function(event) {
 
 $(document).on("change", "#pubtype", function () {
   var pubType = this.value.toLowerCase();
-  var data = globalData;
-  switch(pubType) {
+  changeTemplate(currentData,pubType);
+});
+
+$(document).on("click", "#save", function () {
+
+    var authors = [];
+    var authString = "";
+    $("#contributors-table tr.author").each(function () {
+      var fullName = $(this).find("input.name").val();
+      var firstName; var lastName;
+      [lastName, firstName] = fullName.split(",");
+      lastName = lastName.trim();
+      firstName = firstName.trim();
+      var author = {
+        lastname: lastName,
+        author_id: "",
+        firstname: firstName
+      }
+      authString = authString + fullName + ", ";
+      authors.push(author);
+    });
+  
+    var outputJSON = {
+      "volume": $("#volume").val() || "",
+      "series": $("#series").val() || "",
+      "abstract": $("#abstract").val() || "",
+      "authors": authors,
+      "number": $("#number").val() || "",
+      "month": $("#month").val() || "",
+      "edition": $("#edition").val() || "",
+      "year": $("#year").val() || "",
+      "keywords": $("#keywords").val() || "",
+      "verified": 1, // Have to check this
+      "title": $("#title").val() || "",
+      "booktitle": $("#booktitle").val() || "",
+      "citation_id": globalConstants.citation_id,
+      "institution": $("#institution").val() || "",
+      "note": $("#note").val() || "",
+      "editor": "",
+      "howpublished": "",
+      "type": "",
+      "location": $("#city").val(),
+      "auth_string": authString,// have to set it
+      "journal": "",
+      "entryTime": globalConstants.entryTime,
+      "translator": "",
+      "last_modified": Date.now(),
+      "address": "",
+      "pages": "",
+      "crossref": "",
+      "chapter": "",
+      "publisher": $("#publisher").val(),
+      "school": "",
+      "doi": $("#doi").val(),
+      "raw": $("#preview-rawtext").text(),
+      "url": $("#url").val(),
+      "bibtex_key": "",
+      "pubtype": $("#pubtype").val(),
+      "organization": ""
+    };
+    // Line 130 citation_update
+  console.log(outputJSON);
+});
+
+var changeTemplate = function (data, pubType) {
+  
+    switch(pubType) {
       case "article": 
         console.log("Article")
-        var dynamicTemplate = $("#articleTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
+        render(data, "#articleTemplate", "#dynamicTemplateContainer");
+        render(data, "#journalTemplate", "#journalContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#volumeTemplate", "#volumeContainer");
+        render(data, "#numberTemplate", "#numberContainer");
+        render(data, "#pagesTemplate", "#pagesContainer");
+        render(data, "#noteTemplate", "#noteContainer");
         break;
 
       case "book":
         console.log("Book")
-        var dynamicTemplate = $("#bookTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
+        render(data, "#bookTemplate", "#dynamicTemplateContainer");
+        render(data, "#bookTitleTemplate", "#bookTitleContainer");
+        render(data, "#publisherTemplate", "#publisherContainer");
+        render(data, "#chapterTemplate", "#chapterContainer");
+        render(data, "#cityTemplate", "#cityContainer");
+        render(data, "#volumeTemplate", "#volumeContainer");
+        render(data, "#seriesTemplate", "#seriesContainer");
+        render(data, "#editionTemplate", "#editionContainer");
+        render(data, "#pagesTemplate", "#pagesContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#noteTemplate", "#noteContainer");
         break;
 
       case "techreport": 
         console.log("Tech Report")
-        var dynamicTemplate = $("#techreportTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
+        render(data, "#techreportTemplate", "#dynamicTemplateContainer");
+        render(data, "#institutionTemplate", "#institutionContainer");
+        render(data, "#numberTemplate", "#numberContainer");
+        render(data, "#cityTemplate", "#cityContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#noteTemplate", "#noteContainer");
         break;
 
       case "misc":
         console.log("Misc")
-        var dynamicTemplate = $("#miscTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
+        render(data, "#miscTemplate", "#dynamicTemplateContainer");
+        render(data, "#howPublishedTemplate", "#howPublishedContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#noteTemplate", "#noteContainer");
         break;
 
       case "proceedings": 
         console.log("proceedings")
-        var dynamicTemplate = $("#proceedingsTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
+        render(data, "#proceedingsTemplate", "#dynamicTemplateContainer");
+        render(data, "#publisherTemplate", "#publisherContainer");
+        render(data, "#cityTemplate", "#cityContainer");
+        render(data, "#organizationTemplate", "#organizationContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#noteTemplate", "#noteContainer");
         break;
 
       case "unpublished":
         console.log("unpublished")
-        var dynamicTemplate = $("#unpublishedTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
+        render(data, "#unpublishedTemplate", "#dynamicTemplateContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#noteTemplate", "#noteContainer");
         break;
 
       case "phdthesis":
       case "mastersthesis":
         console.log("thesis")
-        var dynamicTemplate = $("#thesisTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
+        render(data, "#thesisTemplate", "#dynamicTemplateContainer");
+        render(data, "#schoolTemplate", "#schoolContainer");
+        render(data, "#cityTemplate", "#cityContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#noteTemplate", "#noteContainer");
         break;
 
-      case "web_published":
+      case "webpub":
         console.log("web_published")
-        var dynamicTemplate = $("#webpublishedTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
+        render(data, "#webpublishedTemplate", "#dynamicTemplateContainer");
+        render(data, "#dateRetrievedTemplate", "#dateRetrievedContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#noteTemplate", "#noteContainer"); 
         break;
 
       case "incollection":
       case "inproceedings":
       case "conference":
         console.log("Incollection || inproceedings || conference")
-        var dynamicTemplate = $("#incollectionTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
+        render(data, "#incollectionTemplate", "#dynamicTemplateContainer");
+        render(data, "#bookTitleTemplate", "#bookTitleContainer");
+        render(data, "#cityTemplate", "#cityContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#organizationTemplate", "#organizationContainer");
+        render(data, "#publisherTemplate", "#publisherContainer");  
+        render(data, "#pagesTemplate", "#pagesContainer");
+        render(data, "#noteTemplate", "#noteContainer");            
         break;
 
-      case "manualTemplate":
+      case "manual":
         console.log("manualTemplate")
-        var dynamicTemplate = $("#manualTemplate").html();
-        var dynamicResult = Mustache.render(dynamicTemplate, data);
-        $("#dynamicUpdate").html(dynamicResult);
-        break; 
+        render(data, "#manualTemplate", "#dynamicTemplateContainer");
+        render(data, "#organizationTemplate", "#organizationContainer");
+        render(data, "#cityTemplate", "#cityContainer");
+        render(data, "#editionTemplate", "#editionContainer");
+        render(data, "#noteTemplate", "#noteContainer");  
+        break;
 
-    } 
+      case "editedbook":
+        console.log("Edited Book");
+        render(data, "#editedBookTemplate", "#dynamicTemplateContainer");
+        render(data, "#publisherTemplate", "#publisherContainer"); 
+        render(data, "#cityTemplate", "#cityContainer");
+        render(data, "#volumeTemplate", "#volumeContainer");
+        render(data, "#seriesTemplate", "#seriesContainer");
+        render(data, "#editionTemplate", "#editionContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#noteTemplate", "#noteContainer");
+        break;
 
-});
+      case "inbook":
+        console.log("In book");
+        render(data, "#inBookTemplate", "#dynamicTemplateContainer");
+        render(data, "#bookTitleTemplate", "#bookTitleContainer");
+        render(data, "#publisherTemplate", "#publisherContainer");
+        render(data, "#chapterTemplate", "#chapterContainer");
+        render(data, "#cityTemplate", "#cityContainer");
+        render(data, "#volumeTemplate", "#volumeContainer");
+        render(data, "#seriesTemplate", "#seriesContainer");
+        render(data, "#editionTemplate", "#editionContainer");
+        render(data, "#pagesTemplate", "#pagesContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#noteTemplate", "#noteContainer");
+        break;
 
-$("#templateForm").submit(function (e) {
+      case "translatedbook":
+        console.log("translatedbook");
+        render(data, "#translatedBookTemplate", "#dynamicTemplateContainer");
+        render(data, "#publisherTemplate", "#publisherContainer");
+        render(data, "#cityTemplate", "#cityContainer");
+        render(data, "#seriesTemplate", "#seriesContainer");
+        render(data, "#editionTemplate", "#editionContainer");
+        render(data, "#volumeTemplate", "#volumeContainer");
+        render(data, "#monthTemplate", "#monthContainer");
+        render(data, "#noteTemplate", "#noteContainer");
+        break;
+    }
+}
 
-   var authors = [];
-    $("#contributors-table tr").each(function () {
-      $('td', this).each(function () {
-        if($(this).find("input.name").val()){
-          // Add authentication to API's
-          // Brainstorm on Verify button
-          // Throw error message when there are no required authors
-          // Check how the editors go to the API
-          var author = {
-            // Auto completing,write an API for it
-          "author_id": "",
-            // How is the firstname coming from the API
-          "firstname": "",
-          "lastname": $(this).find("input.name").val()
-         }          
-        }
-
-        authors.push(author);
-      })
-  });
-  
-var outputJSON = {
-  "volume": $("#volume").val(),
-  "series": $("#series").val(),
-  "abstract": $("#abstract").val(),
-  "authors": authors,
-  "number": "",
-  "month": $("#month").val(),
-  "edition": $("#edition").val(),
-  "year": $("#year").val(),
-  "keywords": $("#keywords").val(),
-  "verified": 1,
-  "title": $("#title").val(),
-  "booktitle": "",
-  "citation_id": 43107,
-  "institution": "",
-  "note": $("#note").val(),
-  "editor": "",
-  "howpublished": "",
-  "type": "",
-  "location": $("#city").val(),
-  "auth_string": "Boorstin, D.,  ABC, EDF, ",// have to set it
-  "journal": "",
-  "entryTime": 1463161832,
-  "translator": "",
-  "last_modified": Date.now(),
-  "address": "",
-  "pages": "",
-  "crossref": "",
-  "chapter": "",
-  "publisher": $("#publisher").val(),
-  "school": "",
-  "doi": $("#doi").val(),
-  "raw": "Boorstin, D. (1992). The creators: A history of the heroes of the imagination. New York: Random House.",
-  "url": $("#url").val(),
-  "bibtex_key": "",
-  "pubtype": $("#pubtype").val(),
-  "organization": ""
+var render = function (data, template, container) {
+  var templateContent = $(template).html();
+  var result = Mustache.render(templateContent, data);
+  $(container).html(result);
 };
-  console.log(outputJSON);
-  e.stopImmediatePropagation();
-});
