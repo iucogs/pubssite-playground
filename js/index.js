@@ -3,7 +3,7 @@ var globalConstants = {};
 
 $("document").ready(function () {
   console.log("In the doc ready func")
-  $.getJSON('http://nupubs.cogs.indiana.edu/citation/33590', function (data) {
+  $.getJSON('https://inpho.cogs.indiana.edu/pubs/citation/63', function (data) {
     currentData = data;
     // Setting global constants
     globalConstants.citation_id = data.citation_id;
@@ -15,7 +15,8 @@ $("document").ready(function () {
     // Setting the publicationType
     var pubType = data.pubtype.toLowerCase();
     $("#pubtype option[value="+pubType+"]").attr("selected", true);
-    changeTemplate(data, pubType);
+
+    renderDynamicTemplate(data, pubType);
 
     // Setting the month
     var publicationMonth = data.month.toLowerCase();
@@ -31,7 +32,9 @@ $("document").ready(function () {
 
 $(document).on("click", "#add", function (){
   console.log("In the addition function");
-  var tableRow = `
+  var noOfAuthors =  getNoOfAuthors();
+  if(noOfAuthors <= 6){
+    var tableRow = `
           <tr class="author">
             <td>
               <label class="checkbox-label">
@@ -57,7 +60,19 @@ $(document).on("click", "#add", function (){
             </tr>
 `
    $('#contributors-table > tbody:last').append(tableRow); 
+ } else {
+  alert("Sorry the no of Authors are exceeded");
+ }
+  
 });
+
+var getNoOfAuthors = function () {
+  var noOfAuthors = 0;
+  $("#contributors-table tr").each(function () {
+    noOfAuthors = noOfAuthors + 1;
+  });
+  return noOfAuthors;
+};
 
 $(document).on("click", "#delete", function () {
   $(".selected").remove();
@@ -90,7 +105,7 @@ $(document).on("click", "#contributors-table tr", function(event) {
 
 $(document).on("change", "#pubtype", function () {
   var pubType = this.value.toLowerCase();
-  changeTemplate(currentData,pubType);
+  renderDynamicTemplate(currentData,pubType);
 });
 
 $(document).on("click", "#save", function () {
@@ -123,7 +138,7 @@ $(document).on("click", "#save", function () {
       "year": $("#year").val() || "",
       "keywords": $("#keywords").val() || "",
       "verified": 1, // Have to check this
-      "title": $("#title").val() || "",
+      "title": $("#title").val(),
       "booktitle": $("#booktitle").val() || "",
       "citation_id": globalConstants.citation_id,
       "institution": $("#institution").val() || "",
@@ -133,7 +148,7 @@ $(document).on("click", "#save", function () {
       "type": "",
       "location": $("#city").val(),
       "auth_string": authString,// have to set it
-      "journal": "",
+      "journal": $("#journal").val() || "",
       "entryTime": globalConstants.entryTime,
       "translator": "",
       "last_modified": Date.now(),
@@ -154,7 +169,9 @@ $(document).on("click", "#save", function () {
   console.log(outputJSON);
 });
 
-var changeTemplate = function (data, pubType) {
+
+
+var renderDynamicTemplate = function (data, pubType) {
   
     switch(pubType) {
       case "article": 
