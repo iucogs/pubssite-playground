@@ -9,6 +9,8 @@
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   	<script src="js/mustache.js"></script>
+  	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+  	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/additional-methods.js"></script>
 
   	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/reset.css">
@@ -23,7 +25,7 @@
 	<!--Start Journal Template-->
 	<script type="text/template" id="journalTemplate">
 		<label>Journal</label>
-		<input class="form-control input-sm" id="journal" type="text" required="true" value="{{journal}}">
+		<input class="form-control input-sm" id="journal" name="Journal" type="text" required="true" value="{{journal}}">
 	</script>
 	<!--End Journal Template-->
 
@@ -50,7 +52,7 @@
 	<!--Start Volume Template-->
 	<script type="text/template" id="volumeTemplate">
 		<label>Volume</label>
-		<input class="form-control input-sm" id="volume" type="number" required="true" value="{{volume}}">
+		<input class="form-control input-sm" id="volume" name="Volume" type="number" required="true" value="{{volume}}">
 	</script>
 	<!--End Volume Template-->
 
@@ -64,7 +66,7 @@
 	<!--Start Pages Template-->
 	<script type="text/template" id="pagesTemplate">
 		<label>Pages</label>
-		<input class="form-control input-sm" id="pages" type="text" required="true" value="{{pages}}">
+		<input class="form-control input-sm" id="pages" name="Pages" type="text" required="true" value="{{pages}}">
 	</script>
 	<!--End Pages Template-->
 
@@ -78,14 +80,14 @@
 	<!--Start Book Title Template-->
 	<script type="text/template" id="bookTitleTemplate">
 		<label>Book Title</label>
-		<input class="form-control input-sm" id="booktitle" type="text" required="true" value="{{booktitle}}">
+		<input class="form-control input-sm" id="booktitle" name="Book Title" type="text" required="true" value="{{booktitle}}">
 	</script>
 	<!--End Book Title Template-->
 
 	<!--Start Publisher Template-->
 	<script type="text/template" id="publisherTemplate">
 		<label>Publisher</label>
-		<input class="form-control input-sm" id="publisher" type="text" required value="{{publisher}}">
+		<input class="form-control input-sm" id="publisher" name="Publisher" type="text" required value="{{publisher}}">
 	</script>
 	<!--End Publishr Template-->
 
@@ -99,7 +101,7 @@
 	<!--Start city Template-->
 	<script type="text/template" id="cityTemplate">
 		<label>City</label>
-		<input class="form-control input-sm" id="city" type="text" required value="{{location}}">
+		<input class="form-control input-sm" id="city" name="City" type="text" required value="{{location}}">
 	</script>
 	<!--End city Template-->
 
@@ -120,7 +122,7 @@
 	<!--Start Institution template-->
 	<script type="text/template" id="institutionTemplate">
 		<label>Institution</label>
-		<input class="form-control input-sm" id="institution" type="text" required value="{{institution}}">
+		<input class="form-control input-sm" id="institution" name="Institution" type="text" required value="{{institution}}">
 	</script>
 	<!--End Institution template-->	
 
@@ -134,23 +136,43 @@
 	<!--Start how Published template-->
 	<script type="text/template" id="howPublishedTemplate">
 		<label>How published</label>
-		<input class="form-control input-sm" id="howpublished" type="text" required value="{{howpublished}}">
+		<input class="form-control input-sm" id="howpublished" name="How Published" type="text" required value="{{howpublished}}">
 	</script>
 	<!--End how Published template-->		
 
 	<!--Start School template-->
 	<script type="text/template" id="schoolTemplate">
         <label>School</label>
-        <input class="form-control input-sm" id="school" type="text" required="true" value="{{school}}">
+        <input class="form-control input-sm" id="school" name="School" type="text" required="true" value="{{school}}">
 	</script>
 	<!--End school template-->
 	
 	<!--Start date retrieved template-->
 	<script type="text/template" id="dateRetrievedTemplate">
 		<label>Date Retrieved</label>
-		<input class="form-control input-sm" id="dateretrieved" type="date" required>
+		<input class="form-control input-sm" id="dateretrieved" name="Date Retrieved" type="date" required>
 	</script>
 	<!--End date retrieved template-->
+
+	<!--Start Error Message modal-->
+	<script type="text/template" id="errorModalTemplate">
+		
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Correct the following errors</h4>
+					</div>
+					<div class="modal-body">
+					{{#errorMessages}}
+						<p>{{field}} : {{message}}</p>
+					{{/errorMessages}}
+					</div>
+				</div>
+			</div>
+		
+	</script>
+	<!--End Error Message modal-->
 
 	<!--End inputfield Templates-->
 
@@ -375,11 +397,11 @@
   		    <div class="form-group">
 		      <div class="col-sm-8">
 		        <label for="title">Title</label>
-		        <input class="form-control input-sm" id="title" type="text" required="true" value="{{title}}" />
+		        <input class="form-control input-sm" id="title" name="Title" type="text" required="true" value="{{title}}" />
 		      </div>
 		      <div class="col-sm-4">
 		        <label for="year">Year</label>
-		        <input class="form-control input-sm" id="year" type="number" required="true" value="{{year}}" />
+		        <input class="form-control input-sm" id="year" name="Year" type="number" required="true" value="{{year}}" />
 		      </div>
 		    </div>
 		    <div class="form-group col-sm-12">
@@ -416,11 +438,20 @@
 		<div class="col-sm-6">
 			<div id="preview-pane">
 				<p id="preview-header">Preview:</p>
-				<label id="preview-rawtext">
-					{{raw}}
-				</label>
-				<button type="button" class="btn btn-default btn-md">Update Preview</button>
-				<button type="button" class="btn btn-default btn-md">Raw Text</button>
+			<label id="preview-rawtext">
+				{{raw}}
+			</label>
+			<button type="button" class="btn btn-default btn-md">Update Preview</button>
+			<button type="button" class="btn btn-default btn-md">Raw Text</button>
+						
+<!-- 				<div id="tabs">
+	<ul>
+		<li><a href="">Raw</a></li>
+		<li><a href="">Preview</a></li>
+	</ul>
+	<div id="rawText"></div>
+	<div id="preview"></div>
+</div> -->
 			</div>
 
 			<div class="form-group">
@@ -435,7 +466,7 @@
 
 			<div class="form-group">
 				<label for="url">URL</label>
-  				<input type="url" class="form-control input-sm" id="url" value="{{url}}">
+  				<input type="url" class="form-control input-sm" id="url" value={{url}}>
 			</div>
 
 			<div class="form-group">
@@ -448,14 +479,16 @@
 	<div class="container">
 		<div id="control-buttons" class="btn-grp">
 			<button type="button" id="verify" class="btn btn-warning">Verify</button>
-			<button type="button" id="save" class="btn btn-success">Save</button>
+			<input type="submit" id="save" class="btn btn-success" value="Save"/>
 			<button type="button" id="close" class="btn btn-danger">Close</button>
 		</div>
+		<div id="errorModalContainer" class="modal fade" role="dialog"></div>
 	</div>
-
+	
+	<!--On -->
 
 	</script>
-	<form id="wholeTemplateContainer"></form>
+	<form method="post" id="wholeTemplateContainer"></form>
 </body>
 
 </html>

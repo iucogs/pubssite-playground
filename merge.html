@@ -1,0 +1,369 @@
+
+	<!--Start of Left Dynamic Templates-->
+	<!--Start leftArticle Template-->
+	<script type="text/template" id="leftArticleTemplate">
+
+		<p class="leftJournal"><b>Journal:</b> {{journal}}</p>
+		<p class="leftVolume"><b>Volume:</b> {{volume}}</p>
+		<p class="leftNumber"><b>Number:</b> {{number}}</p>
+		<p class="leftPages"><b>Pages:</b> {{pages}}</p>
+		<p class="leftMonth"><b>Month:</b> {{month}}</p>
+
+	</script>
+	<!--End leftArticle Template-->
+
+	<!--Start leftBook Template-->
+	<script type="text/template" id="leftBookTemplate">
+
+		<p class="leftPublisher"><b>Publisher:</b> {{publisher}}</p>
+		<p class="leftVolume"><b>Volume:</b> {{volume}}</p>
+		<p class="leftSeries"><b>Series:</b> {{series}}</p>
+		<p class="leftCity"><b>City:</b> {{location}}</p>
+		<p class="leftEdition"><b>Edition:</b> {{edition}}</p>
+		<p class="leftMonth"><b>Month:</b> {{month}}</p>
+
+	</script>
+	<!--End leftBook Template-->
+
+	<!--Start Left TechReport Template-->
+	<script type="text/template" id="leftTechReportTemplate">
+
+		<p class="leftInstitution"><b>Institution:</b> {{institution}}</p>
+		<p class="leftNumber"><b>Number:</b> {{number}}</p>
+		<p class="leftCity"><b>City:</b> {{location}}</p>
+		<p class="leftMonth"><b>Month:</b> {{month}}</p>
+
+	</script>
+	<!--End Left TechReport Template-->
+
+	<!--Start leftMisc Template-->
+	<script type="text/template" id="leftMiscTemplate">
+
+		<p class="leftHowPublished"><b>HowPublished:</b> {{howpublished}}</p>
+		<p class="leftMonth"><b>Month:</b> {{month}}</p>
+
+	</script>
+	<!--End leftMisc Template-->
+
+	<!--Start leftProceedings Template-->
+	<script type="text/template" id="leftProceedingsTemplate">
+
+		<p class="leftPublisher"><b>Publisher:</b> {{publisher}}</p>
+		<p class="leftNumber"><b>Number:</b> {{number}}</p>
+		<p class="leftCity"><b>City:</b> {{location}}</p>
+		<p class="leftMonth"><b>Month:</b> {{month}}</p>
+
+	</script>
+	<!--End leftProceedings Template-->
+
+	<!--Start leftUnPublished Template-->
+	<script type="text/template" id="leftUnpublishedTemplate">
+
+		<p class="leftMonth"><b>Month:</b> {{month}}</p>
+
+	</script>
+	<!--End leftUnPublished Template-->
+
+	<!--Start leftThesis Template-->
+	<script type="text/template" id="leftThesisTemplate">
+		
+		<p class="leftSchool"><b>School:</b> {{school}}</p>
+		<p class="leftCity"><b>City:</b> {{location}}</p>
+		<p class="leftMonth"><b>Month:</b> {{month}}</p>
+
+	</script>
+	<!--End leftThesis Template-->
+
+	<!--Start leftWebPublished Template-->
+	<script type="text/template" id="leftWebPublishedTemplate">
+		
+		<p class="leftMonth"><b>Date Retrieved:</b> {{month}}</p>
+		<p class="leftMonth"><b>Month:</b> {{month}}</p>
+
+	</script>
+	<!--End leftWebPublished Template-->
+
+	<!--Start leftInCollection Template-->
+	<script type="text/template" id="leftInCollectionTemplate">
+		
+		<p class="leftBookTitle"><b>Book Title:</b> {{title}}</p>
+		<p class="leftPages"><b>Pages:</b> {{pages}}</p>
+		<p class="leftOrganization"><b>Organization:</b> {{organization}}</p>
+		<p class="leftPublisher"><b>Publisher:</b> {{publisher}}</p>
+		<p class="leftCity"><b>City:</b> {{location}}</p>
+
+	</script>
+	<!--End leftInCollection Template-->
+
+	<!--Start leftManual Template-->
+	<script type="text/template" id="leftManualTemplate">
+
+		<p class="leftOrganization"><b>Organization:</b> {{organization}}</p>
+		<p class="leftCity"><b>City:</b> {{location}}</p>
+		<p class="leftEdition"><b>Edition:</b> {{edition}}</p>
+		<p class="leftMonth"><b>Month:</b> {{month}}</p>
+
+	</script>
+	<!--End leftManual Template-->
+	<!--End of Left Dynamic Templates-->
+
+	<script type="text/template" id="leftTemplate">
+			<div class="btn-group">
+				<button type="button" class="btn btn-primary">Edit/Save</button>
+				<button type="button" class="btn btn-primary">Delete</button>
+				<button type="button" class="btn btn-primary">MoveTab Right</button>
+			</div>
+
+			<div id="rawWrapperLeft" class="form-group wrappers">
+				<label for="rawLeft">Raw:</label>
+				<textarea disabled class="form-control" rows="3" class="rawLeft">{{raw}}</textarea>
+			</div>
+			
+			<div class="wrappers " id="tableWrapperLeft">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Type</th>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#authors}}
+						<tr>
+							<td>Author</td>
+							<td>{{lastname}} , {{firstname}}</td>
+						</tr>
+						{{/authors}}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="form-group  wrappers" id="titleWrapperLeft" >
+				<p><b>Title:</b> {{title}}</p>
+				<p><b>Year:</b> {{year}}</p>
+			</div>
+
+			<div class="form-group  wrappers" id="pubWrapperLeft">
+				<p><b>Publication Type:</b> {{pubtype}}</p>
+			</div>
+
+			<div class="form-group  wrappers" id="dynamicWrapperLeft">
+			</div>
+
+			<div class="form-group">
+				<label for="abstractLeft">Abstract</label>
+				<textarea disabled class="form-control" rows="3" class="abstractLeft">{{abstract}}</textarea>
+			</div>
+
+			<div class="form-group">
+				<label for="keywordsLeft">KeyWords</label>
+				<textarea disabled class="form-control" rows="3" class="keywordsLeft">{{keywords}}</textarea>
+			</div>
+
+			<div class="form-group  wrappers" id="urlWrapperLeft">
+				<p><b>URL:</b> {{url}}</p>
+				<p><b>DOI:</b> {{doi}}</p>
+			</div>				
+
+			<div class="form-group">
+				<label for="noteLeft">Note</label>
+				<textarea class="form-control" rows="3" class="noteLeft">{{note}}</textarea>
+			</div>
+
+		</div>
+	</script>
+
+	<script type="text/template" id="rightTemplate">
+
+			<div class="btn-group">
+				<button type="button" class="btn btn-primary">Edit/Save</button>
+				<button type="button" class="btn btn-primary">Delete</button>
+				<button type="button" class="btn btn-primary">MoveTab Right</button>
+			</div>
+
+			<div class="form-group  wrappers" id="rawWrapperRight">
+				<label for="rawRight">Raw:</label>
+				<textarea class="form-control" rows="3" class="rawRight">{{raw}}</textarea>
+			</div>
+
+			<div class="wrappers " id="tableWrapperRight">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Type</th>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#authors}}
+						<tr>
+							<td>
+								<div class="form-group">
+									<select class="form-control input-sm contributor-select">
+										<option value="author">Author</option>
+				    					<option value="editor">Editor</option>
+				    					<option value="translator">Translator</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="form-group">
+									<input type="text" class="form-control input-sm" value="{{lastname}} , {{firstname}}">
+								</div>
+							</td>
+						</tr>
+						{{/authors}}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="form-group  wrappers" id="titleWrapperRight">
+				<div class="row">
+					<label for="title" class="col-xs-2">Title: </label>
+					<div class="col-xs-10">
+						<input type="text" class="form-control input-sm" value="{{title}}">
+					</div>
+				</div>
+
+				<div class="row">
+					<label for="year" class="col-xs-2">Year: </label>
+					<div class="col-xs-10">
+						<input type="text" class="form-control input-sm" value={{year}}>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group  wrappers" id="pubWrapperRight">
+				<div class="row">
+					<label for="pubtype" class="col-xs-5">Publication Type: </label>
+					<div class="col-xs-7">
+						<select class="form-control input-sm" id="pubtype">
+							<option value="article">Article</option>
+							<option value="book">Book</option>
+							<option value="editedbook">Edited Book</option>
+							<option value="conference">Conference</option>
+							<option value="inbook">In Book</option>
+							<option value="incollection">In Collection</option>
+							<option value="inproceedings">In Proceedings</option>
+							<option value="manual">Manual</option>
+							<option value="masterthesis">Master's Thesis</option>
+							<option value="phdthesis">Ph.D. Thesis</option>
+							<option value="inproceedings">Proceedings</option>
+							<option value="techreport">Tech Report</option>
+							<option value="unpublished">Unpublished</option>
+							<option value="misc">Miscellaneous</option>
+							<option value="translatedbook">Translated Book</option>
+							<option value="webpub">Web Published</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group  wrappers" id="dynamicWrapperRight">
+				<div class="row">
+					<label for="booktitle" class="col-xs-4">Book Title: </label>
+					<div class="col-xs-8">
+						<input type="text" class="form-control input-sm" value="{{booktitle}}">
+					</div>
+				</div>
+
+				<div class="row">
+					<label for="pages" class="col-xs-4">Pages: </label>
+					<div class="col-xs-5">
+						<input type="text" class="form-control input-sm" value={{pages}}>
+					</div>
+				</div>
+				<div class="row">
+					<label for="organization" class="col-xs-4">Organization: </label>
+					<div class="col-xs-8">
+						<input type="text" class="form-control input-sm" value="{{organization}}">
+					</div>
+				</div>
+
+				<div class="row">
+					<label for="publisher" class="col-xs-4">Publisher: </label>
+					<div class="col-xs-8">
+						<input type="text" class="form-control input-sm" value={{publisher}}>
+					</div>
+				</div>
+				<div class="row">
+					<label for="city" class="col-xs-4">City: </label>
+					<div class="col-xs-8">
+						<input type="text" class="form-control input-sm" value="{{location}}">
+					</div>
+				</div>
+
+				<div class="row">
+					<label for="month" class="col-xs-4">Month: </label>
+					<div class="col-xs-5">
+						<input type="text" class="form-control input-sm" value={{month}}>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="abstractRight">Abstract</label>
+				<textarea class="form-control" rows="3" class="abstractRight">{{abstract}}</textarea>
+			</div>
+
+			<div class="form-group">
+				<label for="keywordsRight">KeyWords</label>
+				<textarea class="form-control" rows="3" class="keywordsRight">{{keywords}}</textarea>
+			</div>
+
+			<div class="form-group  wrappers" id="urlWrapperRight">
+				<div class="row">
+					<label for="url" class="col-xs-2">Url: </label>
+					<div class="col-xs-10">
+						<input type="text" class="form-control input-sm" value={{url}}>
+					</div>
+				</div>
+
+				<div class="row">
+					<label for="doi" class="col-xs-2">DOI: </label>
+					<div class="col-xs-10">
+						<input type="text" class="form-control input-sm" value={{doi}}>
+					</div>
+				</div>
+			</div>	
+
+			<div class="form-group">
+				<label for="noteLeft">Note</label>
+				<textarea class="form-control" rows="3" class="noteLeft">{{note}}</textarea>
+			</div>
+
+	</script>
+
+	<form id="mergeForm">
+		<div class="container">
+			<!--Start first column-->
+			<div class="col-sm-5" id="left">
+				</div>
+			<!--End first column-->
+
+			<!--Start first column-->
+			<div class="col-sm-1" id="middle"></div>
+			<!--End first column-->
+
+			<!--Start first column-->
+			<div class="col-sm-5" id="right"></div>
+			<!--End first column-->
+		
+	</form>
+
+	<form id="mergeForm">
+		<div class="container">
+			<!--Start first column-->
+			<div class="col-sm-5" id="left"></div>
+				
+			<!--End first column-->
+
+			<!--Start first column-->
+			<div class="col-sm-2" id="middle"></div>
+			<!--End first column-->
+
+			<!--Start first column-->
+			<div class="col-sm-5" id="right"></div>
+			<!--End first column-->
+		</div>
+	</form>

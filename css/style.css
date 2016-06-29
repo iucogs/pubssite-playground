@@ -59,3 +59,7 @@ tr td{
     border-collapse: collapse;
   border-spacing: 0;
 }
+.error{
+  border-color: red
+}
+.succe
