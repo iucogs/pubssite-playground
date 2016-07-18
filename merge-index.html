@@ -155,6 +155,16 @@
 	</script>
 	<!--End date retrieved template-->
 
+	<script type="text/template" id="listItemTemplate">
+		<li><a href="#citation-{{citationId}}">{{citationId}}</a></li>
+	</script>
+
+	<script type="text/template" id="tabDivisionTemplate">
+		<div id="citation-{{citationId}}">
+			{{citationId}}
+		</div>
+	</script>
+
 	<!--Start Error Message modal-->
 	<script type="text/template" id="errorModalTemplate">
 		
@@ -470,6 +480,16 @@
 			</div>
 			<button type="button" id="update-preview" class="btn btn-default btn-md">Update Preview</button>
 			<button type="button" id="raw-text" class="btn btn-default btn-md">Raw Text</button>
+						
+<!-- 				<div id="tabs">
+	<ul>
+		<li><a href="">Raw</a></li>
+		<li><a href="">Preview</a></li>
+	</ul>
+	<div id="rawText"></div>
+	<div id="preview"></div>
+</div> -->
+			
 
 			<div class="form-group">
 				<label for="abstract">Abstract:</label>

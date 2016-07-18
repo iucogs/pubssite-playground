@@ -62,4 +62,7 @@ tr td{
 .error{
   border-color: red
 }
-.succe
+.disabledPointer{
+  pointer-events: none;
+    opacity: 1.0;
+}

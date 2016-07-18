@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Merge Template</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="js/mustache.js"></script>
+	<script src="js/jquery.validate.js"></script>
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/additional-methods.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+	<link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script type="text/javascript" src="js/merge.js"></script>
+	<script type="text/javascript" src="citations.js"></script>
+</head>
+<body>
+	<script type="text/template" id="listItemTemplate">
+		<li><a href="#citation-{{citation_id}}">{{citation_id}}</a></li>
+	</script>
+
+	<script type="text/template" id="tableTemplate">
+		<div class="table table-borderless table-sm">
+			<table class="table" id="contributors-table">	
+				<thead>
+					<tr>
+						<th></th>
+						<th>Contributors</th>
+						<th>Last Name, First Name</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#authors}}
+					<tr class="contributors">
+						<td>
+							<label class="checkbox-label">
+								<div class="radio">
+									<input type="radio" name="optradio" class="table-radio">
+								</div>
+							</label>
+						</td>
+						<td>
+							<div class="form-group">
+								<select class="form-control input-sm contributor-select">
+									<option value="author">Author</option>
+									<option value="editor">Editor</option>
+									<option value="translator">Translator</option>
+								</select>
+							</div>
+						</td>
+						<td>
+							<div class="form-group">
+								<input name ="ContributorName" class="form-control input-sm name" type="text" value="{{lastname}}, {{firstname}}">
+							</div>
+						</td>
+					</tr>
+					{{/authors}}
+				</tbody>
+			</table>
+			</div>		
+	</script>
+
+	<script type="text/template" id="tabDivisionTemplate">
+		<div id="citation-{{citation_id}}">
+			<div class="col-sm-12">
+				<div class="col-sm-6">
+					<div class="tableContainer"></div>
+					<div class="form-group">
+						<div class="col-sm-8">
+							<label for="title">Title</label>
+							<input class="form-control input-sm title" name="Title" type="text" required="true" value="{{title}}" />
+						</div>
+						<div class="col-sm-4">
+							<label for="year">Year</label>
+							<input class="form-control input-sm year" name="Year" type="number" required="true" value="{{year}}" />
+						</div>
+					</div>
+					<div class="form-group col-sm-12">
+						<label for="pubtype">Publication Type:</label>
+						<select class="form-control input-sm" id="pubtype">
+							<option value="article">Article</option>
+							<option value="book">Book</option>
+							<option value="edited_book">Edited Book</option>
+							<option value="conference">Conference</option>
+							<option value="inbook">In Book</option>
+							<option value="incollection">In Collection</option>
+							<option value="inproceedings">In Proceedings</option>
+							<option value="manual">Manual</option>
+							<option value="mastersthesis">Master's Thesis</option>
+							<option value="phdthesis">Ph.D. Thesis</option>
+							<option value="proceedings">Proceedings</option>
+							<option value="techreport">Tech Report</option>
+							<option value="unpublished">Unpublished</option>
+							<option value="misc">Miscellaneous</option>
+							<option value="translated_book">Translated Book</option>
+							<option value="web_published">Web Published</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-sm-6"></div>
+			</div>
+		</div>
+	</script>
+
+	<form id="merge-form">
+		<div class="container">
+			<div id="tabs">
+				<ul></ul>
+			</div>
+		</div>
+		
+		
+	</form>
+
+</body>
+</html>

@@ -1,26 +1,35 @@
-/*
-TODO: Done: Add the message as a modal errorModalTemplate
-TODO: Post the data and check for the status
-TODO: Check if all the required fields are good
-TODO: Preview / button APA format jquery input change
-*/
-
-
-
 var currentData = {};
 var globalConstants = {};
+var templates = {};
 
+
+/**
+TODO: Done Write a validation which doesnt let the user submit without a first name and last name
+**/
 $("document").ready(function () {
-  console.log("In the doc ready func");
 
-  $.getJSON('https://inpho.cogs.indiana.edu/pubs/citation/63', function (data) {
+  setValidationSettings();
+
+  $.getJSON('https://inpho.cogs.indiana.edu/pubs/citation/43106', function (data) {
     currentData = data;
     // Setting global constants
     globalConstants.citation_id = data.citation_id;
     globalConstants.entryTime = data.entryTime;
+    globalConstants.bibtex_key = data.bibtex_key;
+    globalConstants.crossref = data.crossref;
+    globalConstants.isPreview = true
 
     // Displaying the dynamic template
     render(data, "#dataTemplate", "#wholeTemplateContainer");
+
+    // Displaying the APA formatted template
+
+    $.getScript("apa_templates.js", function () {
+      templates = apa_templates; 
+      var temp_citation = $.extend({}, data);
+      temp_citation.authors = render_apa_authors(temp_citation.authors);
+      $("#preview-rawtext").html(Mustache.render(templates[data.pubtype], temp_citation));
+   });
 
     // Setting the publicationType
     var pubType = data.pubtype.toLowerCase();
@@ -40,10 +49,16 @@ $("document").ready(function () {
   
 });
 
+/**
+Table Methods start
+**/
+
+/**
+- Add a row to the table
+**/
 $(document).on("click", "#add", function (){
-  console.log("In the addition function");
   var tableRow = `
-  <tr class="author">
+  <tr class="contributors">
   <td>
   <label class="checkbox-label">
   <div class="radio">
@@ -53,7 +68,7 @@ $(document).on("click", "#add", function (){
   </td>
   <td>
   <div class="form-group">
-  <select class="form-control input-sm" class="contributor-select">
+  <select class="form-control input-sm contributor-select">
   <option value="author">Author</option>
   <option value="editor">Editor</option>
   <option value="translator">Translator</option>
@@ -62,61 +77,176 @@ $(document).on("click", "#add", function (){
   </td>
   <td>
   <div class="form-group">
-  <input class="form-control input-sm name" type="text">
+  <input class="form-control input-sm name" type="text" name ="ContributorName">
   </div>
   </td>
   </tr>
   `
-  $('#contributors-table > tbody:last').append(tableRow); 
-  
+  $('#contributors-table > tbody:last').append(tableRow);  
 });
 
-
+/**
+- Functionality of the delete arrow button
+- Checks whether the number of authors are greater than one and removes the author
+- Else, renders an error message to the modal using a template
+**/
 $(document).on("click", "#delete", function () {
   var noOfAuthors =  getNoOfAuthors();
   if(noOfAuthors > 1) {
     $(".selected").remove();
-    $("#contributors-table tr").each(function () {
-      $('td', this).each(function () {
-        if($(this).find("input.name").val()){
-         console.log($(this).find("input.name").val()) 
-       }
-     })
-    });
+    updatePreview();
   } else {
-    alert("The minimum no of authors is 1");
+    render({message: "Minimum one author is required"}, "#simpleErrorModalTemplate", "#errorModalContainer");
+    $("#errorModalContainer").modal();
   }
 });
 
+
+/**
+- Functionality of the up arrow button, which moves a table row upwards
+- TODO: Update preview 
+**/
 $(document).on("click", "#up", function () {
-  console.log($(".selected").find("input.name").val());
   $(".selected").prev().before($(".selected"));
+  updatePreview();
 });
 
+/**
+- Functionality of the down button, which moves a table row downwards
+- TODO: Update preview
+**/
 $(document).on("click", "#down", function () {
-  console.log($(".selected").find("input.name").val());
   $(".selected").next().after($(".selected"));
+  updatePreview();
 });
 
+/**
+- Adds the selected class to the selected element on the table
+- which will be used in the deletion and addition of table rows
+**/
 $(document).on("click", "#contributors-table tr", function(event) {
   if($(event.target).is('[type="radio"]')){
-   console.log("In this function");
    $(this).addClass("selected").siblings().removeClass("selected");
  }
 });
 
+/**
+- When the contributor type changes in the dropdown
+**/
+$(document).on("change", ".contributor-select", function () {
+  updatePreview();
+});
+
+/**
+- Gets the publication type and renders the appropriate template
+**/
 $(document).on("change", "#pubtype", function () {
   var pubType = this.value.toLowerCase();
   renderDynamicTemplate(currentData,pubType);
+  updatePreview();
 });
 
-function submitForm() {
-  console.log("The form has been submitted");
+/**Table method ends**/
+
+
+/**
+- Functionality whenever the data is changed on the form, the preview is updated
+**/
+$(document).on("keyup", "input", function (e) {
+  updatePreview();
+});
+
+/**
+- Functionality of the ignore button on the modal, which calls the method to post data on server
+**/
+$(document).on("click", "#ignore-message", function () {
+  putDataToServer();
+});
+
+/**
+- Validates the whole page
+- If the page is valid, submits the data to the server
+**/
+$(document).on("click", "#save", function (event) {
+  if($("#wholeTemplateContainer").valid()) {
+    putDataToServer();
+  }
+});
+
+$(document).on("click", "#raw-text", function () {
+  globalConstants.isPreview = false;
+  updatePreview();
+});
+
+$(document).on("click", "#update-preview", function () {
+  globalConstants.isPreview = true;
+  updatePreview();
+}); 
+
+/**
+TODO: Ask Jaimie, what happens when we have just firstName/lastName of the author, should we render?
+TODO: Add functionality for the raw text button
+- Check if an author is empty, if not then render the apa template on the preview panel
+**/
+function updatePreview () {
+  if (globalConstants.isPreview) {
+    var currentObject = generateOutput();
+    if (! currentObject.authorEmpty) {
+      var tempCurrentObject = $.extend({}, currentObject);
+      tempCurrentObject.authors = render_apa_authors(tempCurrentObject.authors);
+      if (tempCurrentObject.editor) { tempCurrentObject.editor = render_apa_authors(tempCurrentObject.editor) }
+      if (tempCurrentObject.translator) { tempCurrentObject.translator = render_apa_authors(tempCurrentObject.translator)}
+      //console.log(tempCurrentObject)
+      if(templates[currentObject.pubtype] === undefined) {
+        $("#preview-rawtext").html(Mustache.render(templates["unknown"], tempCurrentObject));
+      } else {
+        console.log(currentObject.pubtype)
+        $("#preview-rawtext").html(Mustache.render(templates[currentObject.pubtype], tempCurrentObject));
+      }
+    }
+  } else {
+    $("#preview-rawtext").text(currentData.raw)
+  }
 }
 
-$(document).on("click", "#save", function (event) {
+/**
+TODO: Write AJAX call which sends the data to the server
+**/
+function putDataToServer () {
+  $.ajax({
+    type: 'PUT',
+    dataType: 'json',
+    url: "http://nupubs.cogs.indiana.edu/citation/43106",
+    headers: {"X-HTTP-Method-Override": "PUT"},
+    data: JSON.stringify(generateOutput()),
+    success: function (result, status, xhr){
+      console.log(result)
+    },
+    error: function (result, status, xhr) {
+      console.log(result)
+    }
+  })
+}
 
+jQuery.validator.addMethod("checkContributor", function (value) {
+    if (value == "") return false;
+    if(value.indexOf(',') > -1) {
+      return true
+    } else {
+      return false
+    }
+}, "Contributor name should be in the format of LastName, FirstName")
+
+/**
+- Set the validation settings for the whole form
+**/
+function setValidationSettings () {
+  var submitted = false;
   $("#wholeTemplateContainer").validate({
+    rules:{
+      ContributorName: "checkContributor",
+      ContributorName: "required"
+    },
     showErrors: function (errorMap, errorList) {
       if (submitted) {    
         var errorMessages = [];
@@ -141,24 +271,90 @@ $(document).on("click", "#save", function (event) {
     success: function (element) {
       $(element).removeClass('error');
     },
-    submitHandler: function () {
-      var authors = [];
-      var authString = "";
-      $("#contributors-table tr.author").each(function () {
-        var fullName = $(this).find("input.name").val();
-        var firstName; var lastName;
-        [lastName, firstName] = fullName.split(",");
-        lastName = lastName.trim();
-        firstName = firstName.trim();
-        var author = {
-          lastname: lastName,
-          author_id: "",
-          firstname: firstName
-        }
-        authString = authString + fullName + ", ";
-        authors.push(author);
-      });
+  });
+}
 
+function createContributors (fullName) {
+  var firstName = ""; var lastName = ""; var authorEmpty=false;
+  if (fullName.indexOf(',') > -1) {
+    [lastName, firstName] = fullName.split(",");
+    if (lastName) {
+      lastName = lastName.trim()
+    } else {
+      lastName = ""
+      authorEmpty = true;
+    }
+    if (firstName) {
+      firstName = firstName.trim()
+    } else {
+      firstName = ""
+      authorEmpty = true;
+    }
+  }
+  else {
+    lastName = fullName
+    lastName.trim()
+    authorEmpty = true;
+  }
+  
+  return {
+    "lastName" : lastName,
+    "firstName" : firstName,
+    "authorEmpty" : authorEmpty
+  }
+}
+
+/**
+TODO: - Done: Add the translators and editors
+TODO: - Refactor the author case
+TODO: - Check about authors and editors 
+**/
+
+function generateOutput () {
+  var authors = []; var editors = []; var translators = [];
+  var authString; var editors; var translators;
+  var authorEmpty = false; 
+  $("#contributors-table tr.contributors").each(function () {
+        var contributorType = $(this).find("select.contributor-select").val();
+        var fullName = $(this).find("input.name").val();
+        if (fullName != "") {
+          contriObject = createContributors (fullName)
+          authorEmpty = contriObject.authorEmpty
+          switch(contributorType) {
+            case "editor" :
+            var editor = {
+              lastname: contriObject.lastName,
+              author_id: "",
+              firstname: contriObject.firstName
+            }
+            editors.push(editor)
+            break;
+
+            case "translator" :
+            var translator = {
+              lastname: contriObject.lastName,
+              author_id: "",
+              firstname: contriObject.firstName
+            }
+            translators.push(translator)
+            break;
+
+            case "author" :
+            var author = {
+              lastname: contriObject.lastName,
+              author_id: "",
+              firstname: contriObject.firstName
+            }
+            authString = authString + fullName + ", ";
+            authors.push(author);
+            break;
+          }
+        }
+        });
+
+      /*
+      verified: What about this
+      */
       var outputJSON = {
         "volume": $("#volume").val() || "",
         "series": $("#series").val() || "",
@@ -170,46 +366,44 @@ $(document).on("click", "#save", function (event) {
         "year": $("#year").val() || "",
         "keywords": $("#keywords").val() || "",
         "verified": 1, // Have to check this
-        "title": $("#title").val(),
+        "title": $("#title").val() || "",
         "booktitle": $("#booktitle").val() || "",
         "citation_id": globalConstants.citation_id,
         "institution": $("#institution").val() || "",
         "note": $("#note").val() || "",
-        "editor": "",
-        "howpublished": "",
-        "type": "",
+        "editor": editors,
+        "howpublished": $("#howpublished").val() || "",
+        "type": $("#pubtype").val() || "",
         "location": $("#city").val(),
         "auth_string": authString,// have to set it
         "journal": $("#journal").val() || "",
         "entryTime": globalConstants.entryTime,
-        "translator": "",
+        "translator": translators || "",
         "last_modified": Date.now(),
         "address": "",
-        "pages": "",
-        "crossref": "",
-        "chapter": "",
-        "publisher": $("#publisher").val(),
-        "school": "",
-        "doi": $("#doi").val(),
-        "raw": $("#preview-rawtext").text(),
-        "url": $("#url").val(),
-        "bibtex_key": "",
-        "pubtype": $("#pubtype").val(),
-        "organization": ""
-    };
-    // Line 130 citation_update
-    console.log(outputJSON);
-  }
-});
+        "pages": $("#pages").val() || "",
+        "crossref": globalConstants.crossref,
+        "chapter": $("#chapter").val() || "",
+        "publisher": $("#publisher").val() || "",
+        "school": $("#school").val() || "",
+        "doi": $("#doi").val() || "",
+        "raw": $("#preview-rawtext").text() || "",
+        "url": $("#url").val() || "",
+        "bibtex_key": globalConstants.bibtex_key,
+        "pubtype": $("#pubtype").val() || "",
+        "organization": $("#organization").val() || "",
+        "authorEmpty": authorEmpty
+      };
 
-  
-});
+      console.log(outputJSON)
+      return outputJSON;
+    }
 
-var getNoOfAuthors = function () {
+function getNoOfAuthors () {
   return $("#contributors-table tbody tr").length;
 };
 
-var renderDynamicTemplate = function (data, pubType) {
+function renderDynamicTemplate (data, pubType) {
 
   switch(pubType) {
     case "article": 
@@ -283,7 +477,7 @@ var renderDynamicTemplate = function (data, pubType) {
     render(data, "#noteTemplate", "#noteContainer");
     break;
 
-    case "webpub":
+    case "web_published":
     console.log("web_published")
     render(data, "#webpublishedTemplate", "#dynamicTemplateContainer");
     render(data, "#dateRetrievedTemplate", "#dateRetrievedContainer");
@@ -314,7 +508,7 @@ var renderDynamicTemplate = function (data, pubType) {
     render(data, "#noteTemplate", "#noteContainer");  
     break;
 
-    case "editedbook":
+    case "edited_book":
     console.log("Edited Book");
     render(data, "#editedBookTemplate", "#dynamicTemplateContainer");
     render(data, "#publisherTemplate", "#publisherContainer"); 
@@ -341,7 +535,7 @@ var renderDynamicTemplate = function (data, pubType) {
     render(data, "#noteTemplate", "#noteContainer");
     break;
 
-    case "translatedbook":
+    case "translated_book":
     console.log("translatedbook");
     render(data, "#translatedBookTemplate", "#dynamicTemplateContainer");
     render(data, "#publisherTemplate", "#publisherContainer");
@@ -355,8 +549,10 @@ var renderDynamicTemplate = function (data, pubType) {
   }
 }
 
-var render = function (data, template, container) {
+function render (data, template, container) {
   var templateContent = $(template).html();
   var result = Mustache.render(templateContent, data);
   $(container).html(result);
 };
+
+
