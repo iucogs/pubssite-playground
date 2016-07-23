@@ -18,8 +18,127 @@
 	<script type="text/javascript" src="citations.js"></script>
 </head>
 <body>
+
+	<!--Article Template-->
+	<script type="text/template" id="articleTemplate">
+
+		<div class="col-sm-7" id="journalContainer"/>
+		<div class="col-sm-1">
+			<div class="checkbox">
+				<input class="checkInput" type="checkbox" value="article">
+			</div>
+		</div>
+		<div class="col-sm-4" id="monthContainer"/>
+		<div class="col-sm-3" id="volumeContainer"/>
+		<div class="col-sm-1">
+			<div class="checkbox">
+				<input class="checkInput" type="checkbox" value="volume">
+			</div>
+		</div>
+		<div class="col-sm-3" id="numberContainer"/>
+		<div class="col-sm-1">
+			<div class="checkbox">
+				<input class="checkInput" type="checkbox" value="number">
+			</div>
+		</div>
+		<div class="col-sm-3" id="pagesContainer"/>
+		<div class="col-sm-1">
+			<div class="checkbox">
+				<input class="checkInput" type="checkbox" value="pages">
+			</div>
+		</div>
+		<div class="form-group col-sm-11" id="noteContainer"/>
+		<div class="col-sm-1">
+			<div class="checkbox">
+				<input class="checkTextArea" type="checkbox" value="note">
+			</div>
+		</div>
+
+	</script>
+	<!--Article Template-->
+
+	<!-- Start TechReport Template-->
+	<script type="text/template" id="techreportTemplate">
+
+		<div class="col-sm-7" id="institutionContainer"/>
+		<div class="col-sm-1">
+			<div class="checkbox">
+				<input class="checkInput" type="checkbox" value="institution">
+			</div>
+		</div>
+		<div class="col-sm-3" id="numberContainer"/>
+		<div class="col-sm-1">
+			<div class="checkbox">
+				<input class="checkInput" type="checkbox" value="number">
+			</div>
+		</div>
+		<div class="col-sm-5" id="cityContainer"/>
+		<div class="col-sm-1">
+			<div class="checkbox">
+				<input class="checkInput" type="checkbox" value="city">
+			</div>
+		</div>
+		<div class="col-sm-5" id="monthContainer"/>
+		<div class="form-group col-sm-11" id="noteContainer"/>
+		<div class="col-sm-1">
+			<div class="checkbox">
+				<input class="checkTextArea" type="checkbox" value="note">
+			</div>
+		</div>
+
+	</script>
+	<!-- End TechReport Template-->
+
+	<!--Start Institution template-->
+	<script type="text/template" id="institutionTemplate">
+		<label>Institution</label>
+		<input class="form-control input-sm institution" name="Institution" type="text" required value="{{institution}}">
+	</script>
+	<!--End Institution template-->	
+
+	<!--Start Number Template-->
+	<script type="text/template" id="numberTemplate">
+		<label>Number</label>
+		<input class="form-control input-sm number" type="number" value="{{number}}">
+	</script>
+	<!--End Number Template-->
+
+	<!--Start city Template-->
+	<script type="text/template" id="cityTemplate">
+		<label>City</label>
+		<input class="form-control input-sm city" name="City" type="text" required value="{{location}}">
+	</script>
+	<!--End city Template-->
+
+	<!--Start Note Template-->
+	<script type="text/template" id="noteTemplate">
+		<label>Note</label>
+		<textarea class="form-control note" rows="4">{{note}}</textarea>
+	</script>
+	<!--End Note Template-->
+
+	<!--Start Month Template-->
+	<script type="text/template" id="monthTemplate">
+		<label>Month</label>
+		<select class="form-control input-sm" id="month">
+			<option value="january">January</option>
+			<option value="february">February</option>
+			<option value="march">March</option>
+			<option value="april">April</option>
+			<option value="may">May</option>
+			<option value="june">June</option>
+			<option value="july">July</option>
+			<option value="august">August</option>
+			<option value="september">September</option>
+			<option value="october">October</option>
+			<option value="november">November</option>
+			<option value="december">December</option>
+		</select>
+	</script>
+	<!--End Month Template-->
+
 	<script type="text/template" id="listItemTemplate">
-		<li role="presentation">
+		<li role="presentation" id={{citationId}}>
 			<a href="#citation{{citationId}}" aria-controls="home" role="tab" data-toggle="tab">{{citationId}}</a>
 		</li>
 	</script>
@@ -73,21 +192,20 @@
 				<div class="form-group">
 					<div class="col-sm-7">
 						<label for="title">Title</label>
-						<input class="form-control input-sm" id="title" name="Title" type="text" required="true" value="{{title}}" />
+						<input class="form-control input-sm title" name="Title" type="text" required="true" value="{{title}}" />
 					</div>
-					<div class="col-sm-1" id="titleCheckBox">
-						<div class="checkbox">
-							<input type="checkbox" value="">
-						</div>
+					<div class="col-sm-1" id="titleContainer">
+						<!--Add a div with ul here-->
+						<!--After that add li to the ul here-->
 					</div>
 
 					<div class="col-sm-3">
 						<label for="year">Year</label>
-						<input class="form-control input-sm" id="year" name="Year" type="number" required="true" value="{{year}}" />
+						<input class="form-control input-sm year" name="Year" type="number" required="true" value="{{year}}" />
 					</div>
 					<div class="col-sm-1">
 						<div class="checkbox">
-							<input type="checkbox" value="">
+							<input class="checkInput" type="checkbox" value="year">
 						</div>
 					</div>
 
@@ -115,38 +233,61 @@
 					</select>
 				</div>
 
+				<div class="form-group" id="dynamicTemplateContainer">
+					
+				</div>
+
 			</div>
 			<div class="col-sm-6">
 				<div class="form-group">
-					<label for="abstract">Raw:</label>
-					<textarea class="form-control" rows="4" id="raw">{{raw}}</textarea>
-				</div>
+					<div class="col-sm-11">
+						<label for="abstract">Raw:</label>
+						<textarea class="form-control raw" id="raw" rows="4">{{raw}}</textarea>
+					</div>
+					<div class="col-sm-1">
+						<div class="checkbox">
+							<input class="checkTextArea" type="checkbox" value="raw">
+						</div>
+					</div>
+					
+					<div class="col-sm-11">
+						<label for="abstract">Abstract:</label>
+						<textarea class="form-control abstract" rows="4">{{abstract}}</textarea>
+					</div>
+					<div class="col-sm-1" >
+						<div class="checkbox">
+							<input class="checkTextArea" type="checkbox" value="abstract">
+						</div>
+					</div>
+					<div class="col-sm-11">
+						<label for="keywords">Keywords:</label>
+						<textarea class="form-control keywords" rows="4">{{keywords}}</textarea>
+					</div>
+					<div class="col-sm-1 " >
+						<div class="checkbox">
+							<input class="checkTextArea" type="checkbox" value="keywords">
+						</div>
+					</div>
 
-				<div class="form-group">
-					<label for="abstract">Abstract:</label>
-					<textarea class="form-control" rows="4" id="abstract">{{abstract}}</textarea>
-				</div>
+					<div class="col-sm-11">
+						<label for="uri ">URI</label>
+						<input type="text" class="form-control input-sm uri" value={{url}}>
+					</div>
+					<div class="col-sm-1">
+						<div class="checkbox">
+							<input class="checkInput" type="checkbox" value="uri">
+						</div>
+					</div>
 
-				<div class="form-group">
-					<label for="keywords">Keywords:</label>
-					<textarea class="form-control" rows="4" id="keywords">{{keywords}}</textarea>
-				</div>
-
-				<div class="form-group">
-					<label for="uri">URI</label>
-					<input type="text" class="form-control input-sm" id="url" value={{url}}>
-				</div>
-
-				<div class="form-group">
-					<label for="doi">DOI</label>
-					<input class="form-control input-sm" id="doi" value="{{doi}}">	
-				</div>
-
-				<div class="checkbox">
-					<label><input type="checkbox" value="">Option 2</label>
-				</div>
-				<div class="checkbox">
-					<label><input type="checkbox" value="" disabled>Option 3</label>
+					<div class="col-sm-11">
+						<label for="doi">DOI</label>
+						<input class="form-control input-sm doi" value="{{doi}}">	
+					</div>
+					<div class="col-sm-1">
+						<div class="checkbox">
+							<input class="checkInput" type="checkbox" value="doi">
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -161,4 +302,3 @@
 </script>
 </body>
 </html>
-
