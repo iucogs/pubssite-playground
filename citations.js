@@ -87,7 +87,7 @@ function render_apa_authors(authors_array) {
 function get_proxies() {
   // get proxies and set up the select list
   var current_user;
-  $.getJSON("http://nupubs.cogs.indiana.edu/proxies/" + user, function(data) {
+  $.getJSON("/proxies/" + user, function(data) {
     proxies = data;
   }).done(function(data) {
     proxies = data;
@@ -122,9 +122,9 @@ function page_init() {
 }
 
 // this populates the collections tabs at the top of the page
-// TODO: Ruth - sort citations by year, author, etc.  
+// TODO: Ruth - sort citations Fby year, author, etc.  
 function populate_collections(user, redraw) {
-  $.getJSON("http://nupubs.cogs.indiana.edu/collection/owner/" + user, function(collections) {
+  $.getJSON("/collection/owner/" + user, function(collections) {
    })
    .done(function(collections) {
     var collections_html = [];
@@ -204,7 +204,7 @@ function close_tab_onclick(tab) {
 // This will get a lot faster when we refactor render_citations into something
 // that doesn't do a global rerendering of all citations.
 function get_collection_citations(collection_id) {
-  $.getJSON("http://nupubs.cogs.indiana.edu/collection/citations/" + collection_id, function (data) {
+  $.getJSON("/collection/citations/" + collection_id, function (data) {
     current_citations[collection_id] = data;
   })
   .done(function () { 
