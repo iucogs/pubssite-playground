@@ -11,13 +11,28 @@
 
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/reset.css">
-	<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
 	<link rel="stylesheet" href="css/style.css">
 	<script type="text/javascript" src="js/merge.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.js"></script>
 	<script type="text/javascript" src="citations.js"></script>
 </head>
 <body>
+
+
+	<!--Dropdown template for the button dropdown-->
+	<script type="text/template" id="dropDownTemplate">
+		<div class="dropDown">
+			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu"/>
+		</div>
+	</script>
+
+	<!--List item template for the button dropdown-->
+	<script type="text/template" id="listItemTemplateDr">
+		<li class="item">{{fieldValue}}</li>
+		<li role="separator" class="divider"></li>
+	</script>
 
 	<!--Article Template-->
 	<script type="text/template" id="articleTemplate">
@@ -194,7 +209,7 @@
 						<label for="title">Title</label>
 						<input class="form-control input-sm title" name="Title" type="text" required="true" value="{{title}}" />
 					</div>
-					<div class="col-sm-1" id="titleContainer">
+					<div class="col-sm-1 titleButtonContainer">
 						<!--Add a div with ul here-->
 						<!--After that add li to the ul here-->
 					</div>

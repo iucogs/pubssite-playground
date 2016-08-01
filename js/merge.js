@@ -1,6 +1,7 @@
 var currentCitationId = 123;
 var similarCitations = [100, 300, 33590];
 var activeCitation;
+var similarData = [];
 
 $(document).ready(function () {
 	$("#tabul").tab();
@@ -9,24 +10,26 @@ $(document).ready(function () {
 	Getting the data for the templates
 	*/
 
-	similarCitations.forEach(function (citationId) {
+	/*similarCitations.forEach(function (citationId) {
 		$.ajax({
 			type:"GET",
 			datatype: "jsonp",
 			url: "https://inpho.cogs.indiana.edu/pubs/citation/" + citationId
 		}).done(function (citationData) {
 			citationData = JSON.parse(citationData);
+			similarData.push(citationData)
 			citationId = citationData.citation_id;
 			currentDivision = "#citation"+citationId;
 			render({citationId}, "#listItemTemplate", "#tabul");
 			render({citationId}, "#tabDivisionTemplate", "#tabdiv");
 			render(citationData, "#containerTemplate", currentDivision);
 			renderDynamicTemplate(citationData, "techreport", currentDivision);
-			//$('#citation'+citationId +' :input').attr("disabled", true);
-			$(":checkbox").attr("disabled", false);
+
+			$('#citation'+citationId +' :input').attr("disabled", true);
+			//$(":checkbox").attr("disabled", false);
 			$('#tabul a:first').tab('show')
 		});
-	});
+	});*/
 	$.ajax({
 		type:"GET",
 		datatype: "jsonp",
@@ -38,11 +41,18 @@ $(document).ready(function () {
 		render({citationId}, "#listItemTemplate", "#tabul");
 		render({citationId}, "#tabDivisionTemplate", "#tabdiv");
 		render(citationData, "#containerTemplate", currentDivision);
+		render(citationData, "#dropDownTemplate", ".titleButtonContainer");
+		render({fieldValue: citationData.title}, "#listItemTemplateDr", ".titleButtonContainer .dropdown-menu");
 		renderDynamicTemplate(citationData, "techreport", currentDivision);
+		
 		$("#citation" + currentCitationId + " .checkbox").hide();
 	});
 
 	
+});
+
+$(document).on("click", "item", function () {
+	console.log("click")
 });
 
 $(document).on("click", ".checkTextArea", function () {
