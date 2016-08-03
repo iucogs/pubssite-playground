@@ -200,7 +200,7 @@ function updatePreview () {
       if(templates[currentObject.pubtype] === undefined) {
         $("#preview-rawtext").html(Mustache.render(templates["unknown"], tempCurrentObject));
       } else {
-        console.log(currentObject.pubtype)
+        
         $("#preview-rawtext").html(Mustache.render(templates[currentObject.pubtype], tempCurrentObject));
       }
     }
@@ -394,8 +394,6 @@ function generateOutput () {
         "organization": $("#organization").val() || "",
         "authorEmpty": authorEmpty
       };
-
-      console.log(outputJSON)
       return outputJSON;
     }
 

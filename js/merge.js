@@ -2,57 +2,67 @@ var currentCitationId = 123;
 var similarCitations = [100, 300, 33590];
 var activeCitation;
 var similarData = [];
+var citationData;
 
 $(document).ready(function () {
 	$("#tabul").tab();
 
 	/*
-	Getting the data for the templates
+	1. Making iframes for the rest three
+	4. Ask Jaimie about the style issue's, add extra css page
+	2. First getting the data for the 3 citations - Done
+	3. Experiment with the titleContainer button - Done
 	*/
 
-	/*similarCitations.forEach(function (citationId) {
-		$.ajax({
-			type:"GET",
-			datatype: "jsonp",
-			url: "https://inpho.cogs.indiana.edu/pubs/citation/" + citationId
-		}).done(function (citationData) {
-			citationData = JSON.parse(citationData);
-			similarData.push(citationData)
-			citationId = citationData.citation_id;
-			currentDivision = "#citation"+citationId;
-			render({citationId}, "#listItemTemplate", "#tabul");
-			render({citationId}, "#tabDivisionTemplate", "#tabdiv");
-			render(citationData, "#containerTemplate", currentDivision);
-			renderDynamicTemplate(citationData, "techreport", currentDivision);
+	/*	Storing all the data in the similarData array */
 
-			$('#citation'+citationId +' :input').attr("disabled", true);
-			//$(":checkbox").attr("disabled", false);
-			$('#tabul a:first').tab('show')
-		});
-	});*/
-	$.ajax({
-		type:"GET",
-		datatype: "jsonp",
-		url: "https://inpho.cogs.indiana.edu/pubs/citation/" + currentCitationId
-	}).done(function (citationData) {
-		citationData = JSON.parse(citationData);
+
+	getJSON("https://inpho.cogs.indiana.edu/pubs/citation/" + currentCitationId).then(function(citationData) {
 		citationId = citationData.citation_id;
 		currentDivision = "#citation"+citationId;
 		render({citationId}, "#listItemTemplate", "#tabul");
 		render({citationId}, "#tabDivisionTemplate", "#tabdiv");
+		// Put that in the current citation tab
 		render(citationData, "#containerTemplate", currentDivision);
+		// Templating for the title
 		render(citationData, "#dropDownTemplate", ".titleButtonContainer");
 		render({fieldValue: citationData.title}, "#listItemTemplateDr", ".titleButtonContainer .dropdown-menu");
-		renderDynamicTemplate(citationData, "techreport", currentDivision);
-		
-		$("#citation" + currentCitationId + " .checkbox").hide();
-	});
 
-	
+		renderDynamicTemplate(citationData, "techreport", currentDivision);
+
+		return similarCitations.reduce(function (sequence, similarCitationId) {
+			return sequence.then(function() {
+				return getJSON("https://inpho.cogs.indiana.edu/pubs/citation/" + similarCitationId)
+			}).then(function(citationData) {
+				citationId = citationData.citation_id;
+				similarData.push(citationData);
+				console.log(similarData)
+			})
+		}, Promise.resolve())
+	}).then(function () {
+		/*The similar Data array should contain data before this method is called, but similar data is empty when the renderDropDown method is called*/
+		renderDropDown("title", similarData)
+	})
 });
 
-$(document).on("click", "item", function () {
-	console.log("click")
+
+function getJSON(url) {
+	return $.getJSON(url)
+}
+
+function renderDropDown(field, similarData) {
+	similarData.forEach(function (data) {
+		console.log(data.field)
+		render({fieldValue: data.field}, "#listItemTemplateDr", "." + field + "titleButtonContainer .dropdown-menu");
+	})
+}
+
+$(document).on("click", ".item", function () {
+	value = $(this).text();
+  /*
+  ul->dropDown->col-sm-1->col-sm-7->input->value
+  */
+  $(".item").parent().parent().parent().prev().find("input").val(value);
 });
 
 $(document).on("click", ".checkTextArea", function () {

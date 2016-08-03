@@ -11,6 +11,12 @@
   border-radius:5px;
   height: 30px;
 }
+
+.item{
+  font-size:12px;
+  cursor: pointer;
+}
+
 #control-buttons{
   margin: 10px;
   text-align:center;
