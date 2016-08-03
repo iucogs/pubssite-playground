@@ -30,15 +30,17 @@ $(document).ready(function () {
 
 		renderDynamicTemplate(citationData, "techreport", currentDivision);
 
-		return similarCitations.reduce(function (sequence, similarCitationId) {
-			return sequence.then(function() {
-				return getJSON("https://inpho.cogs.indiana.edu/pubs/citation/" + similarCitationId)
-			}).then(function(citationData) {
-				citationId = citationData.citation_id;
-				similarData.push(citationData);
-				console.log(similarData)
-			})
-		}, Promise.resolve())
+		similarCitationLinks = similarCitations.slice();
+		for(var i=0; i<similarCitationLinks.length; i++){
+			similarCitationLinks[i] = "https://inpho.cogs.indiana.edu/pubs/citation/" + similarCitationLinks[i]
+		}
+		console.log(similarCitationLinks)
+		return Promise.all(
+			similarCitationLinks.map(getJSON));
+	}).then(function(similarCitationDataArray) {
+		similarCitationDataArray.forEach(function(citationData){
+			similarData.push(citationData);
+		})
 	}).then(function () {
 		/*The similar Data array should contain data before this method is called, but similar data is empty when the renderDropDown method is called*/
 		renderDropDown("title", similarData)
