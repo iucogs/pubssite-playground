@@ -35,16 +35,24 @@ $(document).ready(function () {
 			similarCitationLinks[i] = "https://inpho.cogs.indiana.edu/pubs/citation/" + similarCitationLinks[i]
 		}
 		console.log(similarCitationLinks)
-		return Promise.all(
-			similarCitationLinks.map(getJSON));
-	}).then(function(similarCitationDataArray) {
-		similarCitationDataArray.forEach(function(citationData){
-			similarData.push(citationData);
-		})
-	}).then(function () {
-		/*The similar Data array should contain data before this method is called, but similar data is empty when the renderDropDown method is called*/
-		renderDropDown("title", similarData)
-	})
+    return similarCitationLinks;
+  }).then(function(similarCitationLinks) {
+    //similarCitationLinks = similarCitationLinks.map($.getJSON);
+    console.log(similarCitationLinks);
+		return Promise.all(similarCitationLinks.map($.getJSON))
+      .then(function(similarCitationDataArray) {
+        console.log(similarCitationDataArray);
+        Promise.resolve(similarCitationDataArray);
+        console.log(similarCitationDataArray);
+
+		    similarCitationDataArray.forEach(function(citationData){
+			    similarData.push(citationData);
+		    })
+	  }).then(function () {
+		  /*The similar Data array should contain data before this method is called, but similar data is empty when the renderDropDown method is called*/
+	 	  renderDropDown("title", similarData)
+  	})
+  });
 });
 
 
@@ -54,7 +62,7 @@ function getJSON(url) {
 
 function renderDropDown(field, similarData) {
 	similarData.forEach(function (data) {
-		console.log(data.field)
+		console.log(data[field])
 		render({fieldValue: data.field}, "#listItemTemplateDr", "." + field + "titleButtonContainer .dropdown-menu");
 	})
 }
