@@ -2,7 +2,7 @@ var currentCitationId = 123;
 var similarCitations = [100, 300, 33590];
 var activeCitation;
 var similarData = [];
-var citationData;
+var currentData;
 
 $(document).ready(function () {
 	$("#tabul").tab();
@@ -17,7 +17,8 @@ $(document).ready(function () {
 	/*	Storing all the data in the similarData array */
 
 
-	getJSON("https://inpho.cogs.indiana.edu/pubs/citation/" + currentCitationId).then(function(citationData) {
+	$.getJSON("https://inpho.cogs.indiana.edu/pubs/citation/" + currentCitationId).then(function(citationData) {
+		currentData = citationData;
 		citationId = citationData.citation_id;
 		currentDivision = "#citation"+citationId;
 		render({citationId}, "#listItemTemplate", "#tabul");
@@ -25,54 +26,65 @@ $(document).ready(function () {
 		// Put that in the current citation tab
 		render(citationData, "#containerTemplate", currentDivision);
 		// Templating for the title
-		render(citationData, "#dropDownTemplate", ".titleButtonContainer");
-		render({fieldValue: citationData.title}, "#listItemTemplateDr", ".titleButtonContainer .dropdown-menu");
-
-		renderDynamicTemplate(citationData, "techreport", currentDivision);
+		renderDropDown("title", citationData);
+		renderDropDown("year", citationData);
+		/*render(citationData, "#dropDownTemplate", ".titleButtonContainer");
+		render({fieldValue: citationData.title}, "#listItemTemplateDr", ".titleButtonContainer .dropdown-menu");*/
+		
 
 		similarCitationLinks = similarCitations.slice();
 		for(var i=0; i<similarCitationLinks.length; i++){
 			similarCitationLinks[i] = "https://inpho.cogs.indiana.edu/pubs/citation/" + similarCitationLinks[i]
 		}
-		console.log(similarCitationLinks)
-    return similarCitationLinks;
-  }).then(function(similarCitationLinks) {
+		return similarCitationLinks;
+	}).then(function(similarCitationLinks) {
     //similarCitationLinks = similarCitationLinks.map($.getJSON);
-    console.log(similarCitationLinks);
-		return Promise.all(similarCitationLinks.map($.getJSON))
-      .then(function(similarCitationDataArray) {
-        console.log(similarCitationDataArray);
-        Promise.resolve(similarCitationDataArray);
-        console.log(similarCitationDataArray);
-
-		    similarCitationDataArray.forEach(function(citationData){
-			    similarData.push(citationData);
-		    })
-	  }).then(function () {
-		  /*The similar Data array should contain data before this method is called, but similar data is empty when the renderDropDown method is called*/
-	 	  renderDropDown("title", similarData)
-  	})
-  });
+    
+    return Promise.all(similarCitationLinks.map($.getJSON))
+    .then(function(similarCitationDataArray) {
+    	Promise.resolve(similarCitationDataArray);
+    	similarCitationDataArray.forEach(function(citationData){
+    		similarData.push(citationData);
+    	})
+    }).then(function () {
+    	renderListItem("title", similarData)
+    	renderListItem("year", similarData)
+    	renderDynamicTemplate(currentData, "techreport", currentDivision);
+    })
+});
 });
 
-
-function getJSON(url) {
-	return $.getJSON(url)
+function renderListItem(field, data) {
+	data.forEach(function (data) {
+		if(data[field]!= "") {
+			renderOptions ={}
+			renderOptions.fieldName = field
+			renderOptions.fieldValue = data[field];
+			render(renderOptions, "#listItemTemplateDr", "." + field + "-ButtonContainer .dropdown-menu");
+		}
+	})	
 }
 
-function renderDropDown(field, similarData) {
-	similarData.forEach(function (data) {
-		console.log(data[field])
-		render({fieldValue: data.field}, "#listItemTemplateDr", "." + field + "titleButtonContainer .dropdown-menu");
-	})
+function renderDropDown(field, data) {
+	render(data, "#dropDownTemplate", "." + field + "-ButtonContainer");
+	if (data[field]!= " ") {
+		renderOptions ={}
+		renderOptions.fieldName = field
+		renderOptions.fieldValue = data[field];
+		console.log(renderOptions)
+		render(renderOptions, "#listItemTemplateDr", "." + field + "-ButtonContainer .dropdown-menu");	
+	}
 }
 
 $(document).on("click", ".item", function () {
 	value = $(this).text();
+	className = $(this).attr("class").split(" ")[1].split("-")[1]
+	$("." + className).val(value)
   /*
-  ul->dropDown->col-sm-1->col-sm-7->input->value
+  ul->dropDown->col-sm-1->col-sm-7->input->value .val(value); .prev().find("input")
   */
-  $(".item").parent().parent().parent().prev().find("input").val(value);
+  /*console.log($(this))
+  console.log($(".item").parent().parent().parent().attr("class").split(" ")[1].split("-")[0])*/
 });
 
 $(document).on("click", ".checkTextArea", function () {
@@ -94,6 +106,12 @@ function render (data, template, container) {
 	var result = Mustache.render(templateContent, data);
 	$(container).append(result);
 };
+
+function renderTemplateDropDown(data, similarData,currentDivision, field) {
+	render(data, "#" + field + "Template", currentDivision + " #"+ field +"Container");
+	renderDropDown(field, data);
+	renderListItem(field, similarData)
+}
 
 function renderDynamicTemplate (data, pubType, currentDivision) {
 
@@ -127,9 +145,9 @@ function renderDynamicTemplate (data, pubType, currentDivision) {
 		case "techreport": 
 		console.log("Tech Report")
 		render(data, "#techreportTemplate", currentDivision + " #dynamicTemplateContainer");
-		render(data, "#institutionTemplate", currentDivision + " #institutionContainer");
-		render(data, "#numberTemplate", currentDivision + " #numberContainer");
-		render(data, "#cityTemplate", currentDivision + " #cityContainer");
+		renderTemplateDropDown(data, similarData, currentDivision, "institution")
+		renderTemplateDropDown(data, similarData, currentDivision, "number")
+		renderTemplateDropDown(data, similarData, currentDivision, "city")
 		render(data, "#monthTemplate", currentDivision + " #monthContainer");
 		render(data, "#noteTemplate", currentDivision + " #noteContainer");
 		break;
